@@ -14,12 +14,16 @@
     "preview": "vite preview"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx}": [
+    "src/**/*.{ts,tsx}": [
       "npm run lint:fix",
       "npm run format"
     ]
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/inter": "^5.2.5",
+    "@mui/material": "^6.4.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

@@ -1,15 +1,14 @@
 import Paper from "@mui/material/Paper";
 import classes from "./ArticleCard.module.scss";
 import Grid from "@mui/material/Grid2";
-import { Chip, Stack, Typography } from "@mui/material";
+import { Avatar, Chip, Stack, Typography } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-// import { pink } from "@mui/material/colors";
 
 export default function ArticleCard() {
   return (
     <Paper className={classes.card} elevation={4}>
-      <Grid container spacing={2}>
-        <Grid component="div" size={8} style={{ backgroundColor: "pink" }}>
+      <Grid container columnSpacing={2} rowSpacing={1}>
+        <Grid component="div" size={9.6} style={{ height: "50%" }}>
           <Typography
             variant="h6"
             component="h6"
@@ -27,8 +26,21 @@ export default function ArticleCard() {
             <Chip label="SomeTag" size="small" variant="outlined" />
           </Stack>
         </Grid>
-        <Grid component="div" size={4} style={{ backgroundColor: "salmon" }}>
-          <p>Una, Grande y Libre!</p>
+        <Grid className={classes.avatar} size={2.4}>
+          <div>
+            <h6>John Doe</h6>
+            <time>March 5, 2025</time>
+          </div>
+          <Avatar src="/1.png" alt={`some alt text here`} />
+        </Grid>
+
+        <Grid component="div" size={9.6}>
+          <Typography className={classes.text} component="span">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </Typography>
         </Grid>
       </Grid>
     </Paper>

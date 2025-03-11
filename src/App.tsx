@@ -1,14 +1,15 @@
+import { Container } from "@mui/material";
 import "./App.scss";
+import ArticleCard from "./components/Card";
 import Header from "./components/Header";
 
 function App() {
-
   return (
     <>
       <Header />
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore beatae quisquam voluptatem unde, sequi optio similique dignissimos quae reiciendis rem rerum placeat molestias in nisi molestiae consectetur autem? Laboriosam, sit.
-      </p>
+      <Container style={{ maxWidth: 938, paddingTop: 26 }}>
+        <ArticleCard />
+      </Container>
     </>
   );
 }

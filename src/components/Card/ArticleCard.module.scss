@@ -1,0 +1,22 @@
+.card {
+  max-width: 938px;
+  height: 108px;
+  padding: 16px;
+}
+
+.title {
+  display: inline-flex;
+}
+
+.stackChips div {
+  border-radius: 3px;
+  border: 1px solid #000;
+}
+
+.heart {
+  margin-left: 12px;
+  margin-right: 3px;
+  position: relative;
+  top: 3px;
+  color: #e91e63;
+}

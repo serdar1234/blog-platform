@@ -1,0 +1,19 @@
+.appBar {
+  background-color: white !important;
+  button,
+  h6 {
+    text-transform: capitalize;
+    color: black;
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: 0%;
+    vertical-align: middle;
+    margin-left: 16px;
+  }
+  .signUp__btn {
+    color: #52c41a;
+    border: 1px solid #52c41a;
+  }
+}

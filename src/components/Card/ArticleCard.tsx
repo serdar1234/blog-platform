@@ -15,7 +15,7 @@ export default function ArticleCard() {
             color="primary"
             className={classes.title}
           >
-            Una patria, un estado, un caudillo!
+            Viva la Republica! No pasaran!
           </Typography>
           <span style={{ color: "#000000BF" }}>
             <FavoriteBorderIcon fontSize="small" className={classes.heart} />
@@ -31,7 +31,7 @@ export default function ArticleCard() {
             <h6>John Doe</h6>
             <time>March 5, 2025</time>
           </div>
-          <Avatar src="/1.png" alt={`some alt text here`} />
+          <Avatar src="/1.jpg" alt={`some alt text here`} />
         </Grid>
 
         <Grid component="div" size={9.6}>

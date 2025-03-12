@@ -1,3 +1,3 @@
-import ArticleCard from "./ArticleCard";
+import PreviewCard from "./PreviewCard";
 
-export default ArticleCard;
+export default PreviewCard;

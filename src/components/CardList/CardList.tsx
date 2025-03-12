@@ -4,17 +4,25 @@ import Grid from "@mui/material/Grid2";
 
 import classes from "./CardList.module.scss";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState, IArticle } from "../../types/interfaces";
 import PreviewCard from "../Card/PreviewCard";
+import { fetchArticles } from "../../utils/fetchAPI";
 
 export default function CardList() {
-  const articles: IArticle[] = useSelector(
-    (store: RootState) => store.articles.articles,
+  const { articles }: { articles: IArticle[] } = useSelector(
+    (store: RootState) => store.articles,
   );
   const pageCount: number = useSelector(
     (store: RootState) => store.articles.articlesCount,
   );
+  const dispatch = useDispatch();
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number,
+  ): void => {
+    fetchArticles(dispatch, page);
+  };
 
   return (
     <>
@@ -28,6 +36,7 @@ export default function CardList() {
           count={Math.ceil(pageCount / 5)}
           shape="rounded"
           color="primary"
+          onChange={handlePageChange}
         />
       </Stack>
     </>

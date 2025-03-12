@@ -11,7 +11,7 @@ const articleSlice = createSlice({
   initialState: initialStateArticles,
   reducers: {
     addArticles: (state, action: PayloadAction) => {
-      state.articles = [...state.articles, ...action.payload.articles];
+      state.articles = action.payload.articles;
       state.articlesCount = action.payload.articlesCount;
     },
   },

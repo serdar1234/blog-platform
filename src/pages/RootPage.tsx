@@ -7,7 +7,7 @@ const Root: React.FC = () => {
     <Routes>
       <Route path="/" element={<Main />}>
         <Route index element={<CardList />} />
-        {/* <Route index element={<h2>test2</h2>} /> */}
+        <Route path="articles" element={<CardList />} />
       </Route>
     </Routes>
   );

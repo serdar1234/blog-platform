@@ -1,6 +1,8 @@
 import classes from "./Preview.module.scss";
 import Grid from "@mui/material/Grid2";
-import { Avatar, Chip, Stack, Typography } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IArticleProps } from "../../types/interfaces";
 import convertDate from "../../utils/convertDate";
@@ -9,10 +11,10 @@ import truncateStr from "../../utils/truncateStr";
 import { useState } from "react";
 import stringAvatar from "../../utils/stringAvatar";
 import { Link } from "react-router";
+import Tags from "../Tags";
 
-const Preview: React.FC<IArticleProps> = ({ info }) => {
+const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
   const [imgState, setImgState] = useState<boolean>(false);
-
   return (
     <>
       <Grid component="div" size={9.6} style={{ height: "50%" }}>
@@ -22,18 +24,19 @@ const Preview: React.FC<IArticleProps> = ({ info }) => {
           color="primary"
           className={classes.title}
         >
-          <Link to={`/articles/${info.slug}`}>
-            {truncateStr(info.title, 60)}
-          </Link>
+          {type ? (
+            info.title
+          ) : (
+            <Link to={`/articles/${info.slug}`}>
+              {truncateStr(info.title, 60)}
+            </Link>
+          )}
         </Typography>
-        <span style={{ color: "#000000BF" }}>
+        <span className={classes.likeSpan}>
           <FavoriteBorderIcon fontSize="small" className={classes.heart} />
           {info.favoritesCount}
         </span>
-        <Stack className={classes.stackChips} direction="row" spacing={1}>
-          <Chip label="Tag1" size="small" variant="outlined" />
-          <Chip label="SomeTag" size="small" variant="outlined" />
-        </Stack>
+        <Tags tags={info.tagList} />
       </Grid>
       <Grid className={classes.avatar} size={2.4}>
         <div>

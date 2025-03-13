@@ -9,7 +9,11 @@ const Root: React.FC = () => {
       <Route path="/" element={<Main />}>
         <Route index element={<CardList />} />
         <Route path="articles" element={<CardList />} />
-        <Route path="/articles/:slug" element={<Article />} />
+        <Route
+          path="/articles/:slug"
+          element={<Article />}
+          errorElement={<h1>sdfsfsdf</h1>}
+        />
       </Route>
     </Routes>
   );

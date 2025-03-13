@@ -1,21 +1,14 @@
-$semiBlack: 000000bf;
-
 .title {
   display: inline-flex;
-  max-width: 90%;
-  a {
-    text-decoration: none;
+}
+
+.stackChips {
+  flex-wrap: wrap;
+  gap: 4px;
+  div {
+    border-radius: 3px;
+    border: 1px solid #000;
   }
-}
-
-.stackChips div {
-  border-radius: 3px;
-  border: 1px solid #000;
-}
-
-.likeSpan {
-  color: $semiBlack;
-  display: inline-block;
 }
 
 .heart {
@@ -23,8 +16,7 @@ $semiBlack: 000000bf;
   margin-right: 3px;
   position: relative;
   top: 3px;
-  color: $semiBlack;
-  // color: #e91e63;  // pink heart
+  color: #e91e63;
 }
 
 span.text {

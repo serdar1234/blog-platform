@@ -1,6 +1,8 @@
 import { articleActions } from "../store/articles";
 import { IArticlesObject } from "../types/interfaces";
 
+const BASE: string = "https://blog-platform.kata.academy";
+
 type ArticleAction = ReturnType<typeof articleActions.addArticles>;
 
 export async function fetchArticles(
@@ -11,14 +13,10 @@ export async function fetchArticles(
     let res: Response;
     if (page) {
       res = await fetch(
-        `https://blog-platform.kata.academy/api/articles?limit=5&offset=${(page - 1) * 5}`,
-        { cache: "reload" },
+        `${BASE}/api/articles?limit=5&offset=${(page - 1) * 5}`,
       );
     } else {
-      res = await fetch(
-        `https://blog-platform.kata.academy/api/articles?limit=5`,
-        { cache: "reload" },
-      );
+      res = await fetch(`${BASE}/api/articles?limit=5`);
     }
     if (res.ok) {
       const article: IArticlesObject = await res.json();

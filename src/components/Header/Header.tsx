@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 import classes from "./Header.module.scss";
+import { Link } from "react-router";
 
 export default function Header() {
   return (
@@ -12,7 +13,9 @@ export default function Header() {
       <AppBar position="static" elevation={0} className={classes.appBar}>
         <Toolbar>
           <Typography variant="h6" component="h6" sx={{ flexGrow: 1 }}>
-            Realworld Blog
+            <Link to="/" className={classes.blogLogo}>
+              Realworld Blog
+            </Link>
           </Typography>
           <Button type="button">Sign In</Button>
           <Button

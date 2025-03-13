@@ -1,3 +1,6 @@
+export interface RootState {
+  articles: IArticlesObject;
+}
 export interface IAuthor {
   username: string;
   bio: string;
@@ -20,7 +23,7 @@ export interface IArticle {
 }
 
 export interface IArticleProps {
-  info: IArticle; // We expect an info prop of type IArticle
+  info: IArticle;
 }
 
 export interface IArticlesObject {

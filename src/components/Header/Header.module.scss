@@ -1,5 +1,14 @@
+$green: #52c41a;
+
 .appBar {
   background-color: white !important;
+  .blogLogo {
+    text-decoration: none;
+    color: black;
+    &:hover {
+      color: $green;
+    }
+  }
   button,
   h6 {
     text-transform: capitalize;
@@ -13,7 +22,7 @@
     margin-left: 16px;
   }
   .signUp__btn {
-    color: #52c41a;
-    border: 1px solid #52c41a;
+    color: $green;
+    border: 1px solid $green;
   }
 }

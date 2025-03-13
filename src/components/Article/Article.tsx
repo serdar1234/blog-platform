@@ -5,18 +5,23 @@ import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
-import testText from "../../assets/text.ts";
-import { IArticleProps } from "../../types/interfaces.ts";
-import PreviewCard from "../PreviewCard/PreviewCard.tsx";
+import Preview from "../Preview";
+import { IArticle, RootState } from "../../types/interfaces.ts";
+import { useParams } from "react-router";
+import { useSelector } from "react-redux";
 
-const Article: React.FC<IArticleProps> = ({ info }) => {
+const Article: React.FC = () => {
+  const arts = useSelector((state: RootState) => state.articles.articles);
+  console.log(arts);
+  const { slug } = useParams();
+  const info = arts.filter((art: IArticle) => art.slug === slug);
   return (
     <Paper className={classes.card} elevation={4}>
       <Grid container columnSpacing={2} rowSpacing={1}>
-        <PreviewCard info={info} />
+        <Preview info={info[0]} />
         <Grid component="article" className={classes.markdown} size={12}>
           <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-            {testText}
+            {info[0].body}
           </Markdown>
         </Grid>
       </Grid>

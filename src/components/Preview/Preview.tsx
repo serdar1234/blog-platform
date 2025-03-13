@@ -8,6 +8,7 @@ import truncateStr from "../../utils/truncateStr";
 
 import { useState } from "react";
 import stringAvatar from "../../utils/stringAvatar";
+import { Link } from "react-router";
 
 const Preview: React.FC<IArticleProps> = ({ info }) => {
   const [imgState, setImgState] = useState<boolean>(false);
@@ -21,7 +22,9 @@ const Preview: React.FC<IArticleProps> = ({ info }) => {
           color="primary"
           className={classes.title}
         >
-          {truncateStr(info.title, 60)}
+          <Link to={`/articles/${info.slug}`}>
+            {truncateStr(info.title, 60)}
+          </Link>
         </Typography>
         <span style={{ color: "#000000BF" }}>
           <FavoriteBorderIcon fontSize="small" className={classes.heart} />

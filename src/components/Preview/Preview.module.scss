@@ -1,9 +1,3 @@
-.card {
-  max-width: 938px;
-  height: 108px;
-  padding: 16px;
-}
-
 .title {
   display: inline-flex;
 }
@@ -44,6 +38,7 @@ span.text {
     vertical-align: middle;
     padding-right: 12px;
   }
+
   time {
     font-family: Inter;
     font-weight: 400;
@@ -53,6 +48,7 @@ span.text {
     padding-right: 12px;
     vertical-align: middle;
   }
+
   img {
     width: 46px;
     height: 46px;

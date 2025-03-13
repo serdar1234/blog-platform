@@ -7,7 +7,7 @@ import remarkGfm from "remark-gfm";
 
 import testText from "../../assets/text.ts";
 import { IArticleProps } from "../../types/interfaces.ts";
-import PreviewCard from "../Card/PreviewCard.tsx";
+import PreviewCard from "../PreviewCard/PreviewCard.tsx";
 
 const Article: React.FC<IArticleProps> = ({ info }) => {
   return (

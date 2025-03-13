@@ -4,6 +4,7 @@ import { Avatar, Chip, Stack, Typography } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IArticleProps } from "../../types/interfaces";
 import convertDate from "../../utils/convertDate";
+import truncateStr from "../../utils/truncateStr";
 
 const Preview: React.FC<IArticleProps> = ({ info }) => {
   return (
@@ -15,7 +16,7 @@ const Preview: React.FC<IArticleProps> = ({ info }) => {
           color="primary"
           className={classes.title}
         >
-          {info.title}
+          {truncateStr(info.title, 60)}
         </Typography>
         <span style={{ color: "#000000BF" }}>
           <FavoriteBorderIcon fontSize="small" className={classes.heart} />

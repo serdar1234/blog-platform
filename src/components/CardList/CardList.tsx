@@ -6,7 +6,7 @@ import classes from "./CardList.module.scss";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, IArticle } from "../../types/interfaces";
-import PreviewCard from "../Card/PreviewCard";
+import PreviewCard from "../PreviewCard/PreviewCard";
 import { fetchArticles } from "../../utils/fetchAPI";
 
 export default function CardList() {
@@ -21,6 +21,7 @@ export default function CardList() {
     event: React.ChangeEvent<unknown>,
     page: number,
   ): void => {
+    event.preventDefault();
     fetchArticles(dispatch, page);
   };
 

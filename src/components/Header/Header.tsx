@@ -17,13 +17,15 @@ export default function Header() {
               Realworld Blog
             </Link>
           </Typography>
-          <Button type="button">Sign In</Button>
+          <Button type="button">
+            <Link to={"/sign-in"}>Sign In</Link>
+          </Button>
           <Button
             type="button"
             variant="outlined"
             className={classes.signUp__btn}
           >
-            Sign Up
+            <Link to={"/sign-up"}>Sign Up</Link>
           </Button>
         </Toolbar>
       </AppBar>

@@ -20,6 +20,10 @@ $green: #52c41a;
     letter-spacing: 0%;
     vertical-align: middle;
     margin-left: 16px;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
   .signUp__btn {
     color: $green;

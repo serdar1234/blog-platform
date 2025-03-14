@@ -1,8 +1,6 @@
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
-import Markdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
+import Markdown from "../Markdown";
 import classes from "./Article.module.scss";
 
 import Preview from "../Preview";
@@ -22,9 +20,7 @@ const Article: React.FC = () => {
         <Grid container columnSpacing={2} rowSpacing={1}>
           <Preview info={info} type={"article"} />
           <Grid component="article" className={classes.markdown} size={12}>
-            <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-              {info && info.body}
-            </Markdown>
+            <Markdown>{info && info.body}</Markdown>
           </Grid>
         </Grid>
       )}

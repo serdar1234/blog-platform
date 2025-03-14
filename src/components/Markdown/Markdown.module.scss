@@ -1,0 +1,68 @@
+$semiBlack: 000000bf;
+
+.title {
+  display: inline-flex;
+  max-width: 90%;
+  a {
+    text-decoration: none;
+  }
+}
+
+.stackChips div {
+  border-radius: 3px;
+  border: 1px solid #000;
+}
+
+.likeSpan {
+  color: $semiBlack;
+  display: inline-block;
+}
+
+.heart {
+  margin-left: 12px;
+  margin-right: 3px;
+  position: relative;
+  top: 3px;
+  color: $semiBlack;
+  // color: #e91e63;  // pink heart
+}
+
+span.text {
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 22px;
+  letter-spacing: 0px;
+}
+
+.avatar {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  height: 56px;
+  h6 {
+    margin: 0;
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: 0%;
+    vertical-align: middle;
+    padding-right: 12px;
+  }
+
+  time {
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 22px;
+    letter-spacing: 0px;
+    padding-right: 12px;
+    vertical-align: middle;
+  }
+
+  img {
+    width: 46px;
+    height: 46px;
+  }
+}

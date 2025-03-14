@@ -3,6 +3,8 @@ import Grid from "@mui/material/Grid2";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 
+import Markdown from "../Markdown";
+
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { IArticleProps } from "../../types/interfaces";
 import convertDate from "../../utils/convertDate";
@@ -59,7 +61,7 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
       </Grid>
       <Grid component="div" size={9.6}>
         <Typography className={classes.text} component="span">
-          {info.description}
+          <Markdown>{info.description}</Markdown>
         </Typography>
       </Grid>
     </>

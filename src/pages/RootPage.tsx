@@ -4,6 +4,7 @@ import CardList from "../components/CardList";
 import Article from "../components/Article";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
+import Profile from "../components/Profile";
 
 const Root: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const Root: React.FC = () => {
         <Route path="articles" element={<CardList />} />
         <Route path="sign-up" element={<SignUp />} />
         <Route path="sign-in" element={<SignIn />} />
+        <Route path="profile" element={<Profile />} />
         <Route
           path="/articles/:slug"
           element={<Article />}

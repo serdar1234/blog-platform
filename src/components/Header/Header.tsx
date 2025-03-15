@@ -18,6 +18,9 @@ export default function Header() {
             </Link>
           </Typography>
           <Button type="button">
+            <Link to={"/profile"}>Profile</Link>
+          </Button>
+          <Button type="button">
             <Link to={"/sign-in"}>Sign In</Link>
           </Button>
           <Button

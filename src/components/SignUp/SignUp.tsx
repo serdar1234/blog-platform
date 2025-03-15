@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid2";
 import { Link } from "react-router";
 import { FormControl, TextField, Checkbox } from "@mui/material";
 import { useState } from "react";
+import Input from "../Input";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -15,44 +16,9 @@ export default function SignUp() {
       <Paper elevation={5} className={classes.paper}>
         <h2 className={classes.head}>Create new account</h2>
         <FormControl className={classes.form}>
-          <label htmlFor="username">Username</label>
-          <TextField
-            fullWidth
-            id="username"
-            name="username"
-            size="small"
-            type="text"
-            placeholder="Username"
-            margin="dense"
-            value={name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setName(event.target.value);
-            }}
-          />
-          <label htmlFor="email">Email address</label>
-          <TextField
-            fullWidth
-            id="email"
-            name="email"
-            size="small"
-            type="email"
-            placeholder="Email address"
-            margin="dense"
-            value={name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setName(event.target.value);
-            }}
-          />
-          <label htmlFor="password">Password</label>
-          <TextField
-            fullWidth
-            name="password"
-            id="password"
-            size="small"
-            type="password"
-            placeholder="Password"
-            margin="dense"
-          />
+          <Input type="text" text="Username" value={name} cb={setName} />
+          <Input type="email" text="Email address" value="" />
+          <Input type="password" text="Password" value="" />
           <label htmlFor="password">Repeat Password</label>
           <TextField
             fullWidth

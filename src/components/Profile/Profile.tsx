@@ -1,19 +1,23 @@
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
-import { Link } from "react-router";
-import classes from "./SignIn.module.scss";
-import FormControl from "@mui/material/FormControl";
+import classes from "./Profile.module.scss";
+import { useState } from "react";
+import { FormControl } from "@mui/material";
 import Input from "../Input";
 
-export default function SignIn() {
+export default function Profile() {
+  const [name, setName] = useState("");
+
   return (
     <Grid className={classes.grid}>
       <Paper elevation={5} className={classes.paper}>
-        <h2 className={classes.head}>Sign In</h2>
+        <h2 className={classes.head}>Edit Profile</h2>
         <FormControl className={classes.form}>
+          <Input type="text" text="Username" value={name} cb={setName} />
           <Input type="email" text="Email address" value="" />
-          <Input type="password" text="Password" value="" />
+          <Input type="password" text="New password" value="" />
+          <Input type="text" text="Avatar Image (url)" value="" />
           <Button
             variant="contained"
             size="large"
@@ -21,11 +25,8 @@ export default function SignIn() {
             fullWidth
             className={classes.btn}
           >
-            Login
+            Save
           </Button>
-          <span className={classes.helpText}>
-            Don&#39;t have an account? <Link to="/sign-up">Sign Up</Link>.
-          </span>
         </FormControl>
       </Paper>
     </Grid>

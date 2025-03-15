@@ -29,9 +29,7 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
           {type ? (
             info.title
           ) : (
-            <Link to={`/articles/${info.slug}`}>
-              {truncateStr(info.title, 60)}
-            </Link>
+            <Link to={`/articles/${info.slug}`}>{truncateStr(info.title)}</Link>
           )}
         </Typography>
         <span className={classes.likeSpan}>

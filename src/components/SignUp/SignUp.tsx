@@ -19,7 +19,10 @@ export default function SignUp() {
   } = useForm({});
   const submitForm = (data: unknown) => console.log(data);
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue("email", e.target.value.toLowerCase());
+    setValue("email", e.target.value.trim().toLowerCase());
+  };
+  const handleUnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("uname", e.target.value.trim());
   };
   const password = watch("password");
   return (
@@ -29,7 +32,7 @@ export default function SignUp() {
         <form className={classes.form} onSubmit={handleSubmit(submitForm)}>
           <InputField
             label="Username"
-            name="name"
+            name="uname"
             register={register}
             errors={errors}
             rules={{
@@ -43,6 +46,7 @@ export default function SignUp() {
                 message: "Username must be at most 20 characters",
               },
             }}
+            onChange={handleUnameChange}
             placeholder="Username"
           />
           <InputField

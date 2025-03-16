@@ -1,33 +1,102 @@
+import { useForm } from "react-hook-form";
+
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
+import InputField from "../Input";
+
 import classes from "./Profile.module.scss";
-import { useState } from "react";
-import { FormControl } from "@mui/material";
-import Input from "../Input";
 
 export default function Profile() {
-  const [name, setName] = useState("");
-
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({});
+  const submitForm = (data: unknown) => console.log(data);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("email", e.target.value.trim().toLowerCase());
+  };
+  const handleUnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("uname", e.target.value.trim());
+  };
   return (
     <Grid className={classes.grid}>
       <Paper elevation={5} className={classes.paper}>
         <h2 className={classes.head}>Edit Profile</h2>
-        <FormControl className={classes.form}>
-          <Input type="text" text="Username" value={name} cb={setName} />
-          <Input type="email" text="Email address" value="" />
-          <Input type="password" text="New password" value="" />
-          <Input type="text" text="Avatar Image (url)" value="" />
+        <form className={classes.form} onSubmit={handleSubmit(submitForm)}>
+          <InputField
+            label="Username"
+            name="uname"
+            register={register}
+            errors={errors}
+            rules={{
+              required: "Username is required",
+              minLength: {
+                value: 3,
+                message: "Username must be at least 3 characters",
+              },
+              maxLength: {
+                value: 20,
+                message: "Username must be at most 20 characters",
+              },
+            }}
+            onChange={handleUnameChange}
+            placeholder="Username"
+          />
+          <InputField
+            label="Email address"
+            name="email"
+            register={register}
+            errors={errors}
+            rules={{
+              required: "Email is required.",
+              pattern: {
+                value: /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                message: "Please enter a valid email address",
+              },
+            }}
+            onChange={handleEmailChange}
+            placeholder="Email address"
+          />
+          <InputField
+            label="New password"
+            name="password"
+            register={register}
+            errors={errors}
+            rules={{
+              required: "New password is required",
+              minLength: {
+                value: 6,
+                message: "Your password needs to be at least 6 characters",
+              },
+              maxLength: {
+                value: 40,
+                message: "Your password needs to be at most 20 characters",
+              },
+            }}
+            type="password"
+            placeholder="New password"
+          />
+          <InputField
+            label="Avatar image (url)"
+            name="avatar"
+            register={register}
+            errors={errors}
+            placeholder="Avatar image"
+          />
           <Button
             variant="contained"
             size="large"
+            type="submit"
             disableElevation
             fullWidth
             className={classes.btn}
           >
             Save
           </Button>
-        </FormControl>
+        </form>
       </Paper>
     </Grid>
   );

@@ -1,29 +1,6 @@
 import TextField from "@mui/material/TextField";
-
-import {
-  FieldError,
-  FieldErrors,
-  UseFormRegister,
-  FieldValues,
-  RegisterOptions,
-} from "react-hook-form";
-
-interface InputFieldProps {
-  label: string;
-  register: UseFormRegister<FieldValues>;
-  name: string;
-  placeholder: string;
-  errors?: FieldErrors<FieldValues>;
-  rules?: RegisterOptions<FieldValues>;
-  // rules?: {
-  //   required?: string | boolean;
-  //   pattern?: { value: RegExp; message: string };
-  //   minLength?: { value: number; message: string };
-  //   maxLength?: { value: number; message: string };
-  //   validate?: (x: string) => void;
-  // };
-  [key: string]: unknown;
-}
+import { FieldError } from "react-hook-form";
+import { InputFieldProps } from "../../types/interfaces";
 
 const InputField: React.FC<InputFieldProps> = ({
   label,

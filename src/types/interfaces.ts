@@ -1,3 +1,10 @@
+import {
+  FieldErrors,
+  UseFormRegister,
+  FieldValues,
+  RegisterOptions,
+} from "react-hook-form";
+
 export interface RootState {
   articles: IArticlesObject;
 }
@@ -44,4 +51,14 @@ export interface PayloadAction {
 export interface RootState {
   articles: IArticlesObject;
   user: UserType;
+}
+
+export interface InputFieldProps {
+  label: string;
+  register: UseFormRegister<FieldValues>;
+  name: string;
+  placeholder: string;
+  errors?: FieldErrors<FieldValues>;
+  rules?: RegisterOptions<FieldValues>;
+  [key: string]: unknown;
 }

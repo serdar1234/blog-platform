@@ -27,6 +27,9 @@ export interface IArticleProps {
   type?: string | null;
 }
 
+type U = "username" | "email" | "password" | "avatar";
+export type UserType = Record<U, string>;
+
 export interface IArticlesObject {
   articles: IArticle[];
   articlesCount: number;
@@ -34,9 +37,11 @@ export interface IArticlesObject {
 
 export interface PayloadAction {
   type?: string;
-  payload: IArticlesObject;
+  payload?: IArticlesObject;
+  text?: string;
 }
 
 export interface RootState {
-  articles: IArticlesObject; // This reflects your Redux store's shape.
+  articles: IArticlesObject;
+  user: UserType;
 }

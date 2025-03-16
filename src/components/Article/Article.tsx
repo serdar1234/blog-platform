@@ -8,6 +8,7 @@ import { IArticle, RootState } from "../../types/interfaces.ts";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import Error from "../Error/Error.tsx";
+import truncateStr from "../../utils/truncateStr.ts";
 
 const Article: React.FC = () => {
   const arts = useSelector((state: RootState) => state.articles.articles);
@@ -18,6 +19,8 @@ const Article: React.FC = () => {
     <Paper className={classes.card} elevation={4}>
       {info && (
         <Grid container columnSpacing={2} rowSpacing={1}>
+          <meta name="author" content={info.author.username} />
+          <title>{truncateStr(info.title, 60)}</title>
           <Preview info={info} type={"article"} />
           <Grid component="article" className={classes.markdown} size={12}>
             <Markdown>{info && info.body}</Markdown>

@@ -44,8 +44,7 @@ export interface IArticlesObject {
 
 export interface PayloadAction {
   type?: string;
-  payload?: IArticlesObject;
-  text?: string;
+  payload: IArticlesObject;
 }
 
 export interface RootState {

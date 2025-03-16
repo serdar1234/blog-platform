@@ -29,6 +29,7 @@ export default function Profile() {
           <InputField
             label="Username"
             name="uname"
+            defaultValue="Vasya"
             register={register}
             errors={errors}
             rules={{
@@ -48,6 +49,7 @@ export default function Profile() {
           <InputField
             label="Email address"
             name="email"
+            defaultValue="pupkin@gmail.con"
             register={register}
             errors={errors}
             rules={{
@@ -80,6 +82,7 @@ export default function Profile() {
             placeholder="New password"
           />
           <InputField
+            required={false}
             label="Avatar image (url)"
             name="avatar"
             register={register}

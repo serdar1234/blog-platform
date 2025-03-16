@@ -34,8 +34,12 @@ export interface IArticleProps {
   type?: string | null;
 }
 
-type U = "username" | "email" | "password" | "avatar";
-export type UserType = Record<U, string>;
+type U = "uname" | "email" | "password" | "avatar";
+export type UserRequiredFields = Record<Exclude<U, "avatar">, string>; // all are required, -avatar
+export type UserType = UserRequiredFields & Partial<Record<"avatar", string>>; // +avatar is optional
+
+// type UPass = "uname" | "email" | "password" | "password2";
+// export type TSignUp = Record<UPass, string>;
 
 export interface IArticlesObject {
   articles: IArticle[];
@@ -49,7 +53,7 @@ export interface PayloadAction {
 
 export interface RootState {
   articles: IArticlesObject;
-  user: UserType;
+  // user: UserType;
 }
 
 export interface InputFieldProps {

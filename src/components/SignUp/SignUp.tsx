@@ -8,6 +8,7 @@ import Checkbox from "@mui/material/Checkbox";
 import InputField from "../Input";
 
 import classes from "./SignUp.module.scss";
+import { FieldValues } from "react-hook-form";
 
 export default function SignUp() {
   const {
@@ -17,7 +18,11 @@ export default function SignUp() {
     watch,
     formState: { errors },
   } = useForm({});
-  const submitForm = (data: unknown) => console.log(data);
+
+  // put data from the form into fetch function that will post it to the server
+  const submitForm = (data: FieldValues) => console.log(data);
+  // the end
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("email", e.target.value.trim().toLowerCase());
   };

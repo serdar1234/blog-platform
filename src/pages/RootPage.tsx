@@ -11,10 +11,10 @@ const Root: React.FC = () => {
     <Routes>
       <Route path="/" element={<Main />}>
         <Route index element={<CardList />} />
-        <Route path="articles" element={<CardList />} />
         <Route path="sign-up" element={<SignUp />} />
         <Route path="sign-in" element={<SignIn />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="articles" element={<CardList />} />
         <Route
           path="/articles/:slug"
           element={<Article />}

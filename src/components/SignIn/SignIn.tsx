@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -7,15 +7,21 @@ import Grid from "@mui/material/Grid2";
 import InputField from "../Input";
 
 import classes from "./SignIn.module.scss";
+import { userSignIn } from "../../utils/fetchAPI";
+import { useDispatch } from "react-redux";
 
 export default function SignIn() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm({});
-  const submitForm = (data: unknown) => console.log(data);
+  const submitForm = (data: FieldValues) => {
+    console.log(data);
+    userSignIn(dispatch, data);
+  };
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("email", e.target.value.trim().toLowerCase());
   };

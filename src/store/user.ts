@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserAction, UserRequiredFields } from "../types/interfaces";
+import { UserAction, UserType } from "../types/interfaces";
 
-const initialStateUsers: UserRequiredFields = {
+const initialStateUsers: UserType = {
   uname: "",
   email: "",
+  avatar: "",
 };
 
 const userSlice = createSlice({
@@ -14,6 +15,7 @@ const userSlice = createSlice({
       if (action.payload) {
         state.uname = action.payload.uname;
         state.email = action.payload.email;
+        state.avatar = action.payload.avatar;
       }
     },
   },

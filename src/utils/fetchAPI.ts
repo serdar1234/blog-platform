@@ -1,7 +1,6 @@
 import { FieldValues } from "react-hook-form";
 import { articleActions } from "../store/articles";
 import { userActions } from "../store/user";
-// import { IArticlesObject, UserRequiredFields } from "../types/interfaces";
 import { IArticlesObject } from "../types/interfaces";
 
 const BASE: string = "https://blog-platform.kata.academy/api";
@@ -64,6 +63,84 @@ export async function newUserSignUp(
           email,
         }),
       );
+    }
+  } catch (error) {
+    throw new Error("Error registering new user: " + error);
+  }
+}
+
+export async function userSignIn(
+  dispatch: (action: UAction) => void,
+  info: FieldValues,
+) {
+  let res: Response;
+  const { email, password } = info;
+  const existingUser = {
+    user: {
+      email: email,
+      password,
+    },
+  };
+  try {
+    res = await fetch(`${BASE}/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(existingUser),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const token = data.user.token;
+      localStorage.setItem("token", token);
+      dispatch(
+        userActions.addUser({
+          uname: data.user.username,
+          email,
+        }),
+      );
+    }
+  } catch (error) {
+    throw new Error("Error logging in: " + error);
+  }
+}
+
+export async function updateProfile(
+  dispatch: (action: UAction) => void,
+  info: FieldValues,
+) {
+  let res: Response;
+  const { uname, email, password, avatar } = info;
+  const updatedUser = {
+    user: {
+      email: email,
+      username: uname,
+      password,
+      image: avatar,
+    },
+  };
+  const token: string | null = localStorage.getItem("token");
+  try {
+    if (token) {
+      res = await fetch(`${BASE}/user`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(updatedUser),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        dispatch(
+          userActions.addUser({
+            uname: data.user.username,
+            email,
+            avatar: data.user.image,
+          }),
+        );
+      }
     }
   } catch (error) {
     throw new Error("Error registering new user: " + error);

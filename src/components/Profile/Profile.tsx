@@ -1,20 +1,28 @@
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import InputField from "../Input";
 
+import { RootState } from "../../types/interfaces";
 import classes from "./Profile.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { updateProfile } from "../../utils/fetchAPI";
 
 export default function Profile() {
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm({});
-  const submitForm = (data: unknown) => console.log(data);
+  const submitForm = (data: FieldValues) => {
+    console.log(data);
+    updateProfile(dispatch, data);
+  };
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("email", e.target.value.trim().toLowerCase());
   };
@@ -29,7 +37,7 @@ export default function Profile() {
           <InputField
             label="Username"
             name="uname"
-            defaultValue="Vasya"
+            defaultValue={user.uname || "Vasya"}
             register={register}
             errors={errors}
             rules={{
@@ -49,7 +57,7 @@ export default function Profile() {
           <InputField
             label="Email address"
             name="email"
-            defaultValue="pupkin@gmail.con"
+            defaultValue={user.email || "pupkin@mail.con"}
             register={register}
             errors={errors}
             rules={{
@@ -87,6 +95,13 @@ export default function Profile() {
             name="avatar"
             register={register}
             errors={errors}
+            rules={{
+              pattern: {
+                value:
+                  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2, 6})([/\w.-]*)*\/?$/,
+                message: "Please enter a valid URL",
+              },
+            }}
             placeholder="Avatar image"
           />
           <Button

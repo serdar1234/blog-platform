@@ -4,6 +4,7 @@ import { IArticlesObject, PayloadAction } from "../types/interfaces";
 const initialStateArticles: IArticlesObject = {
   articles: [],
   articlesCount: 0,
+  currentPage: 1,
 };
 
 const articleSlice = createSlice({
@@ -15,6 +16,9 @@ const articleSlice = createSlice({
         state.articles = action.payload.articles;
         state.articlesCount = action.payload.articlesCount;
       }
+    },
+    turnPage: (state, action: { payload: number }) => {
+      state.currentPage = action.payload;
     },
   },
 });

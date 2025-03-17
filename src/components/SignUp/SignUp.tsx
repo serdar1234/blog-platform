@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -8,7 +8,6 @@ import Checkbox from "@mui/material/Checkbox";
 import InputField from "../Input";
 
 import classes from "./SignUp.module.scss";
-import { FieldValues } from "react-hook-form";
 import { newUserSignUp } from "../../utils/fetchAPI";
 import { useDispatch } from "react-redux";
 
@@ -22,12 +21,10 @@ export default function SignUp() {
     formState: { errors },
   } = useForm({});
 
-  // put data from the form into fetch function that will post it to the server
   const submitForm = (data: FieldValues) => {
     console.log(data);
     newUserSignUp(dispatch, data);
   };
-  // the end
 
   const handleUnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("uname", e.target.value.trim());

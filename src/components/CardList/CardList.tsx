@@ -8,13 +8,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, IArticle } from "../../types/interfaces";
 import PreviewCard from "../PreviewCard/PreviewCard";
 import { fetchArticles } from "../../utils/fetchAPI";
+import { articleActions } from "../../store/articles";
 
 export default function CardList() {
   const { articles }: { articles: IArticle[] } = useSelector(
     (store: RootState) => store.articles,
   );
-  const pageCount: number = useSelector(
-    (store: RootState) => store.articles.articlesCount,
+  const currentPage: number | undefined = useSelector(
+    (store: RootState) => store.articles.currentPage,
+  );
+  const { turnPage } = articleActions;
+  const pageCount: number = Math.ceil(
+    useSelector((store: RootState) => store.articles.articlesCount) / 5,
   );
   const dispatch = useDispatch();
   const handlePageChange = (
@@ -22,6 +27,7 @@ export default function CardList() {
     page: number,
   ): void => {
     event.preventDefault();
+    dispatch(turnPage(page));
     fetchArticles(dispatch, page);
   };
 
@@ -34,7 +40,8 @@ export default function CardList() {
       </Grid>
       <Stack spacing={2} alignItems={"center"} sx={{ marginBottom: 2 }}>
         <Pagination
-          count={Math.ceil(pageCount / 5)}
+          count={pageCount}
+          page={currentPage}
           shape="rounded"
           color="primary"
           onChange={handlePageChange}

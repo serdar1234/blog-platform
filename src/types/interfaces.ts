@@ -44,6 +44,7 @@ export type UserType = UserRequiredFields & Partial<Record<"avatar", string>>; /
 export interface IArticlesObject {
   articles: IArticle[];
   articlesCount: number;
+  currentPage?: number;
 }
 
 export interface PayloadAction {
@@ -53,11 +54,11 @@ export interface PayloadAction {
 
 export interface UserAction {
   type?: string;
-  payload: UserRequiredFields;
+  payload: UserType;
 }
 export interface RootState {
   articles: IArticlesObject;
-  user: UserRequiredFields;
+  user: UserType;
 }
 
 export interface InputFieldProps {

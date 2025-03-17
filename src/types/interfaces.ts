@@ -34,7 +34,7 @@ export interface IArticleProps {
   type?: string | null;
 }
 
-type U = "uname" | "email" | "password" | "avatar";
+type U = "uname" | "email" | "avatar";
 export type UserRequiredFields = Record<Exclude<U, "avatar">, string>; // all are required, -avatar
 export type UserType = UserRequiredFields & Partial<Record<"avatar", string>>; // +avatar is optional
 
@@ -51,9 +51,13 @@ export interface PayloadAction {
   payload: IArticlesObject;
 }
 
+export interface UserAction {
+  type?: string;
+  payload: UserRequiredFields;
+}
 export interface RootState {
   articles: IArticlesObject;
-  // user: UserType;
+  user: UserRequiredFields;
 }
 
 export interface InputFieldProps {

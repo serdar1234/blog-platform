@@ -9,8 +9,11 @@ import InputField from "../Input";
 
 import classes from "./SignUp.module.scss";
 import { FieldValues } from "react-hook-form";
+import { newUserSignUp } from "../../utils/fetchAPI";
+import { useDispatch } from "react-redux";
 
 export default function SignUp() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -20,14 +23,17 @@ export default function SignUp() {
   } = useForm({});
 
   // put data from the form into fetch function that will post it to the server
-  const submitForm = (data: FieldValues) => console.log(data);
+  const submitForm = (data: FieldValues) => {
+    console.log(data);
+    newUserSignUp(dispatch, data);
+  };
   // the end
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue("email", e.target.value.trim().toLowerCase());
-  };
   const handleUnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("uname", e.target.value.trim());
+  };
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("email", e.target.value.trim().toLowerCase());
   };
   const password = watch("password");
   return (

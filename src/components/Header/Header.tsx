@@ -1,7 +1,6 @@
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid2";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -24,6 +23,9 @@ export default function Header() {
     fetchArticles(dispatch, 1);
   };
   const user = useSelector((store: RootState) => store.user);
+  const handleLogOut = () => {
+    //
+  };
   console.log("isLoggedIn", user.isLoggedIn);
 
   return (
@@ -36,23 +38,42 @@ export default function Header() {
             </Link>
           </Typography>
           {user.isLoggedIn ? (
-            <Grid className={classes.avatar} size={2.4}>
-              {!user.avatar && (
-                <Avatar {...stringAvatar(user.uname)} alt={user.uname} />
-              )}
-              <Avatar
-                src={user.avatar}
-                onLoad={() => setImgState(true)}
-                onError={() => setImgState(false)}
-                alt="Your profile image"
-                style={{ display: imgState ? "block" : "none" }}
-              />
-            </Grid>
+            <>
+              <Link
+                to="/profile"
+                className={classes.profileLogo}
+                onClick={turnPageOne}
+              >
+                <Typography
+                  variant="h6"
+                  component="h6"
+                  sx={{ marginInlineEnd: 2 }}
+                >
+                  {user.uname}
+                </Typography>
+                {!user.avatar && (
+                  <Avatar {...stringAvatar(user.uname)} alt={user.uname} />
+                )}
+                <Avatar
+                  src={user.avatar}
+                  onLoad={() => setImgState(true)}
+                  onError={() => setImgState(false)}
+                  alt="Your profile image"
+                  style={{ display: imgState ? "block" : "none" }}
+                />
+              </Link>
+              <Button
+                type="button"
+                variant="outlined"
+                className={classes.logOut}
+              >
+                <Link to={"/"} onClick={handleLogOut}>
+                  Log Out
+                </Link>
+              </Button>
+            </>
           ) : (
             <>
-              <Button type="button">
-                <Link to={"/profile"}>Profile</Link>
-              </Button>
               <Button type="button">
                 <NavLink
                   to={"/sign-in"}

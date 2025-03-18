@@ -2,12 +2,17 @@ $green: #52c41a;
 
 .appBar {
   background-color: white !important;
-  .blogLogo {
+  .blogLogo,
+  .profileLogo {
     text-decoration: none;
     color: black;
     &:hover {
       color: $green;
     }
+  }
+  .profileLogo {
+    display: flex;
+    align-items: center;
   }
   button,
   h6 {
@@ -25,8 +30,12 @@ $green: #52c41a;
       text-decoration: none;
     }
   }
-  .signUp__btn {
+  .signUpBtn {
     color: $green;
     border: 1px solid $green;
+  }
+  .logOut {
+    color: black;
+    border: 1px solid black;
   }
 }

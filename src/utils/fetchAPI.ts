@@ -182,3 +182,44 @@ export async function updateProfile(
     throw new Error("Error registering new user: " + error);
   }
 }
+
+export async function startUp(dispatch: (action: UAction) => void) {
+  const tokenExpiry = Number(localStorage.getItem("tokenExpiry"));
+  if (tokenExpiry == 0 || tokenExpiry - Date.now() < 0) {
+    localStorage.clear();
+    dispatch(
+      userActions.addUser({
+        isLoggedIn: false,
+        uname: "",
+        email: "",
+      }),
+    );
+    console.log("clean up");
+  }
+  const token = localStorage.getItem("token");
+  try {
+    const res: Response = await fetch(`${BASE}/user`, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const token = data.user.token;
+      localStorage.setItem("token", token);
+      localStorage.setItem("tokenExpiry", String(Date.now() + 864e5));
+      console.log("start up");
+
+      dispatch(
+        userActions.addUser({
+          uname: data.user.username,
+          email: data.user.email,
+          isLoggedIn: true,
+          avatar: data.user.image,
+        }),
+      );
+    }
+  } catch {
+    console.log("session has expired");
+  }
+}

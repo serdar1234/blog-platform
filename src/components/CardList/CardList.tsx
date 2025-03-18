@@ -9,6 +9,7 @@ import { RootState, IArticle } from "../../types/interfaces";
 import PreviewCard from "../PreviewCard/PreviewCard";
 import { fetchArticles } from "../../utils/fetchAPI";
 import { articleActions } from "../../store/articles";
+import { CircularProgress } from "@mui/material";
 
 export default function CardList() {
   const { articles }: { articles: IArticle[] } = useSelector(
@@ -30,23 +31,26 @@ export default function CardList() {
     dispatch(turnPage(page));
     fetchArticles(dispatch, page);
   };
-
-  return (
-    <>
-      <Grid rowGap={2} className={classes.grid}>
-        {articles.map((a: IArticle) => {
-          return <PreviewCard key={a.slug} info={a} />;
-        })}
-      </Grid>
-      <Stack spacing={2} alignItems={"center"} sx={{ marginBottom: 2 }}>
-        <Pagination
-          count={pageCount}
-          page={currentPage}
-          shape="rounded"
-          color="primary"
-          onChange={handlePageChange}
-        />
-      </Stack>
-    </>
-  );
+  if (articles.length == 0)
+    return <CircularProgress className={classes.spinner} />;
+  else {
+    return (
+      <>
+        <Grid rowGap={2} className={classes.grid}>
+          {articles.map((a: IArticle) => {
+            return <PreviewCard key={a.slug} info={a} />;
+          })}
+        </Grid>
+        <Stack spacing={2} alignItems={"center"} sx={{ marginBottom: 2 }}>
+          <Pagination
+            count={pageCount}
+            page={currentPage}
+            shape="rounded"
+            color="primary"
+            onChange={handlePageChange}
+          />
+        </Stack>
+      </>
+    );
+  }
 }

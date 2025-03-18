@@ -2,6 +2,7 @@ import { FieldValues } from "react-hook-form";
 import { articleActions } from "../store/articles";
 import { userActions } from "../store/user";
 import { IArticlesObject } from "../types/interfaces";
+import axios from "axios";
 
 const BASE: string = "https://blog-platform.kata.academy/api";
 
@@ -29,6 +30,22 @@ export async function fetchArticles(
     }
   } catch (error) {
     throw new Error("Error fetching articles: " + error);
+  }
+}
+
+export async function fetchThisArticle(slug: string | null = null) {
+  try {
+    let res = null;
+    if (slug) {
+      res = await axios.get(`${BASE}/articles/${slug}`);
+    }
+    if (res && res.status === 200) {
+      return res.data;
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error("Error fetching article: " + error.message);
+    }
   }
 }
 

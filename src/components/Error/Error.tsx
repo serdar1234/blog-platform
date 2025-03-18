@@ -6,14 +6,14 @@ import HomeIcon from "@mui/icons-material/Home";
 
 import { useNavigate } from "react-router";
 
-const Error: React.FC = () => {
+const Error: React.FC<{ errorMessage: string }> = ({ errorMessage }) => {
   const navigate = useNavigate();
 
   return (
     <>
       <Alert severity="error">
-        <AlertTitle>Error 404</AlertTitle>
-        We could not find this title.
+        <AlertTitle>Error</AlertTitle>
+        Something went wrong. {errorMessage}
       </Alert>
       <Button
         className={classes.homeBtn}

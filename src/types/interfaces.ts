@@ -18,7 +18,7 @@ export interface IAuthor {
 export interface IArticle {
   slug: string;
   title: string;
-  content: string;
+  // content: string;
   description: string;
   body: string;
   tagList: string[];

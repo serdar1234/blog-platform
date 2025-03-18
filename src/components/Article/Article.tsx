@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
 import Markdown from "../Markdown";
@@ -9,12 +10,37 @@ import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import Error from "../Error/Error.tsx";
 import truncateStr from "../../utils/truncateStr.ts";
+import { fetchThisArticle } from "../../utils/fetchAPI.ts";
+import { CircularProgress } from "@mui/material";
 
 const Article: React.FC = () => {
   const arts = useSelector((state: RootState) => state.articles.articles);
   const { slug } = useParams();
-
-  const info = arts.find((art: IArticle) => art.slug === slug);
+  const [info, setInfo] = useState<IArticle | undefined | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const articleInStore = arts.find((art: IArticle) => art.slug === slug);
+    if (articleInStore) {
+      setInfo(articleInStore);
+      setIsLoading(false);
+    } else {
+      fetchThisArticle(slug)
+        .then((res) => {
+          if (res) {
+            const thisArticle = res.article;
+            setInfo(thisArticle);
+            setIsLoading(false);
+          } else {
+            setInfo(null);
+          }
+        })
+        .catch((error) => {
+          setInfo(null);
+          return <Error errorMessage={error.message} />;
+        });
+    }
+  }, [slug, arts]);
+  if (isLoading) return <CircularProgress />;
   return (
     <Paper className={classes.card} elevation={4}>
       {info && (
@@ -27,7 +53,6 @@ const Article: React.FC = () => {
           </Grid>
         </Grid>
       )}
-      {info === undefined && <Error />}
     </Paper>
   );
 };

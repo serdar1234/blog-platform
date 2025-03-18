@@ -1,22 +1,31 @@
 import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid2";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 import classes from "./Header.module.scss";
-import { Link } from "react-router";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { Link, NavLink } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import { articleActions } from "../../store/articles";
 import { fetchArticles } from "../../utils/fetchAPI";
+import stringAvatar from "../../utils/stringAvatar";
+import { RootState } from "../../types/interfaces";
 
 export default function Header() {
+  const [imgState, setImgState] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { turnPage } = articleActions;
   const turnPageOne = () => {
     dispatch(turnPage(1));
     fetchArticles(dispatch, 1);
   };
+  const user = useSelector((store: RootState) => store.user);
+  console.log("isLoggedIn", user.isLoggedIn);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" elevation={0} className={classes.appBar}>
@@ -26,19 +35,43 @@ export default function Header() {
               Realworld Blog
             </Link>
           </Typography>
-          <Button type="button">
-            <Link to={"/profile"}>Profile</Link>
-          </Button>
-          <Button type="button">
-            <Link to={"/sign-in"}>Sign In</Link>
-          </Button>
-          <Button
-            type="button"
-            variant="outlined"
-            className={classes.signUp__btn}
-          >
-            <Link to={"/sign-up"}>Sign Up</Link>
-          </Button>
+          {user.isLoggedIn ? (
+            <Grid className={classes.avatar} size={2.4}>
+              {!user.avatar && (
+                <Avatar {...stringAvatar(user.uname)} alt={user.uname} />
+              )}
+              <Avatar
+                src={user.avatar}
+                onLoad={() => setImgState(true)}
+                onError={() => setImgState(false)}
+                alt="Your profile image"
+                style={{ display: imgState ? "block" : "none" }}
+              />
+            </Grid>
+          ) : (
+            <>
+              <Button type="button">
+                <Link to={"/profile"}>Profile</Link>
+              </Button>
+              <Button type="button">
+                <NavLink
+                  to={"/sign-in"}
+                  style={({ isActive }) => ({
+                    color: isActive ? "red" : "#000",
+                  })}
+                >
+                  Sign In
+                </NavLink>
+              </Button>
+              <Button
+                type="button"
+                variant="outlined"
+                className={classes.signUp__btn}
+              >
+                <Link to={"/sign-up"}>Sign Up</Link>
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

@@ -5,6 +5,7 @@ const initialStateUsers: UserType = {
   uname: "",
   email: "",
   avatar: "",
+  isLoggedIn: false,
 };
 
 const userSlice = createSlice({
@@ -16,6 +17,7 @@ const userSlice = createSlice({
         state.uname = action.payload.uname;
         state.email = action.payload.email;
         state.avatar = action.payload.avatar;
+        state.isLoggedIn = action.payload.isLoggedIn;
       }
     },
   },

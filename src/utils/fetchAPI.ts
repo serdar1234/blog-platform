@@ -74,15 +74,25 @@ export async function newUserSignUp(
       const data = await res.json();
       const token = data.user.token;
       localStorage.setItem("token", token);
+      localStorage.setItem("tokenExpiry", String(Date.now() + 864e5));
+
       dispatch(
         userActions.addUser({
           uname,
           email,
+          isLoggedIn: true,
         }),
       );
+      return { success: true, message: "" };
+    } else if (res.status === 422) {
+      const data = await res.json();
+      let message: string;
+      if (data.errors.username) message = "Username " + data.errors.username;
+      else message = "Email " + data.errors.email;
+      return { success: false, message };
     }
-  } catch (error) {
-    throw new Error("Error registering new user: " + error);
+  } catch {
+    return { success: false, message: "Sign in failed" };
   }
 }
 
@@ -110,15 +120,22 @@ export async function userSignIn(
       const data = await res.json();
       const token = data.user.token;
       localStorage.setItem("token", token);
+      localStorage.setItem("tokenExpiry", String(Date.now() + 864e5));
+
       dispatch(
         userActions.addUser({
           uname: data.user.username,
           email,
+          isLoggedIn: true,
+          avatar: data.user.image,
         }),
       );
+      return { success: true, message: "" };
+    } else if (res.status === 422) {
+      return { success: false, message: "Invalid data - login failed" };
     }
-  } catch (error) {
-    throw new Error("Error logging in: " + error);
+  } catch {
+    return { success: false, message: "Login failed" };
   }
 }
 
@@ -150,11 +167,13 @@ export async function updateProfile(
 
       if (res.ok) {
         const data = await res.json();
+        localStorage.setItem("token", data.user.token);
         dispatch(
           userActions.addUser({
             uname: data.user.username,
             email,
             avatar: data.user.image,
+            isLoggedIn: true,
           }),
         );
       }

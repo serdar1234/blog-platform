@@ -1,4 +1,5 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useState } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 
 import Paper from "@mui/material/Paper";
@@ -10,8 +11,11 @@ import InputField from "../Input";
 import classes from "./SignUp.module.scss";
 import { newUserSignUp } from "../../utils/fetchAPI";
 import { useDispatch } from "react-redux";
+import { Alert } from "@mui/material";
 
 export default function SignUp() {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     register,
@@ -21,9 +25,15 @@ export default function SignUp() {
     formState: { errors },
   } = useForm({});
 
-  const submitForm = (data: FieldValues) => {
+  const submitForm = async (data: FieldValues) => {
     console.log(data);
-    newUserSignUp(dispatch, data);
+    const result: { success: boolean; message: string } | undefined =
+      await newUserSignUp(dispatch, data);
+    if (result && result.success) {
+      navigate("/");
+    } else if (result && !result.success) {
+      setErrorMessage(result.message);
+    }
   };
 
   const handleUnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +114,15 @@ export default function SignUp() {
             type="password"
             placeholder="Repeat Password"
           />
+          {errorMessage && (
+            <Alert
+              severity="error"
+              className={classes.alert}
+              onClose={() => setErrorMessage(null)}
+            >
+              {errorMessage}
+            </Alert>
+          )}
           <div className={classes.agreement}>
             <Checkbox required />
             <span className={classes.text}>

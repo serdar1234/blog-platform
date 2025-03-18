@@ -1,4 +1,5 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
 import Paper from "@mui/material/Paper";
@@ -8,19 +9,30 @@ import InputField from "../Input";
 
 import classes from "./SignIn.module.scss";
 import { userSignIn } from "../../utils/fetchAPI";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../types/interfaces";
+import { Alert } from "@mui/material";
 
 export default function SignIn() {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const email = useSelector((state: RootState) => state.user.email);
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm({});
-  const submitForm = (data: FieldValues) => {
+  const submitForm = async (data: FieldValues) => {
     console.log(data);
-    userSignIn(dispatch, data);
+    const result: { success: boolean; message: string } | undefined =
+      await userSignIn(dispatch, data);
+    if (result && result.success) {
+      navigate("/");
+    } else if (result && !result.success) {
+      setErrorMessage(result.message);
+    }
   };
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("email", e.target.value.trim().toLowerCase());
@@ -34,6 +46,7 @@ export default function SignIn() {
             label="Email address"
             name="email"
             register={register}
+            defaultValue={email}
             errors={errors}
             rules={{
               required: "Email is required.",
@@ -64,6 +77,15 @@ export default function SignIn() {
             type="password"
             placeholder="Password"
           />
+          {errorMessage && (
+            <Alert
+              severity="error"
+              className={classes.alert}
+              onClose={() => setErrorMessage(null)}
+            >
+              {errorMessage}
+            </Alert>
+          )}
           <Button
             variant="contained"
             size="large"

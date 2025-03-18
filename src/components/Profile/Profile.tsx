@@ -98,7 +98,7 @@ export default function Profile() {
             rules={{
               pattern: {
                 value:
-                  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2, 6})([/\w.-]*)*\/?$/,
+                  /^(https?:\/\/)?([\da-z.-]+)(\.[a-z]{2,6})([/\w.-]*)*\/?$/,
                 message: "Please enter a valid URL",
               },
             }}

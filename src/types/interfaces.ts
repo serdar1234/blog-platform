@@ -36,7 +36,9 @@ export interface IArticleProps {
 
 type U = "uname" | "email" | "avatar";
 export type UserRequiredFields = Record<Exclude<U, "avatar">, string>; // all are required, -avatar
-export type UserType = UserRequiredFields & Partial<Record<"avatar", string>>; // +avatar is optional
+export type UserType = UserRequiredFields &
+  Partial<Record<"avatar", string>> &
+  Record<"isLoggedIn", boolean>; // +avatar is optional
 
 // type UPass = "uname" | "email" | "password" | "password2";
 // export type TSignUp = Record<UPass, string>;

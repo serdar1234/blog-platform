@@ -1,4 +1,5 @@
 import { useForm, FieldValues } from "react-hook-form";
+import { useState } from "react";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -9,19 +10,30 @@ import { RootState } from "../../types/interfaces";
 import classes from "./Profile.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../../utils/fetchAPI";
+import { useNavigate } from "react-router";
+import { Alert } from "@mui/material";
 
 export default function Profile() {
-  const user = useSelector((state: RootState) => state.user);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm({});
-  const submitForm = (data: FieldValues) => {
+
+  const submitForm = async (data: FieldValues) => {
     console.log(data);
-    updateProfile(dispatch, data);
+    const result: { success: boolean; message: string } | undefined =
+      await updateProfile(dispatch, data);
+    if (result && result.success) {
+      navigate("/");
+    } else if (result && !result.success) {
+      setErrorMessage(result.message);
+    }
   };
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("email", e.target.value.trim().toLowerCase());
@@ -29,6 +41,7 @@ export default function Profile() {
   const handleUnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("uname", e.target.value.trim());
   };
+
   return (
     <Grid className={classes.grid}>
       <Paper elevation={5} className={classes.paper}>
@@ -92,6 +105,7 @@ export default function Profile() {
           <InputField
             required={false}
             label="Avatar image (url)"
+            defaultValue={user.avatar}
             name="avatar"
             register={register}
             errors={errors}
@@ -104,6 +118,15 @@ export default function Profile() {
             }}
             placeholder="Avatar image"
           />
+          {errorMessage && (
+            <Alert
+              severity="error"
+              className={classes.alert}
+              onClose={() => setErrorMessage(null)}
+            >
+              {errorMessage}
+            </Alert>
+          )}
           <Button
             variant="contained"
             size="large"

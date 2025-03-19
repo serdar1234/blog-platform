@@ -24,6 +24,7 @@ export default function SignIn() {
     setValue,
     formState: { errors },
   } = useForm({});
+
   const submitForm = async (data: FieldValues) => {
     console.log(data);
     const result: { success: boolean; message: string } | undefined =
@@ -37,6 +38,7 @@ export default function SignIn() {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue("email", e.target.value.trim().toLowerCase());
   };
+
   return (
     <Grid className={classes.grid}>
       <Paper elevation={5} className={classes.paper}>

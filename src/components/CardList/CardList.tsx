@@ -9,7 +9,7 @@ import { RootState, IArticle } from "../../types/interfaces";
 import PreviewCard from "../PreviewCard/PreviewCard";
 import { fetchArticles } from "../../utils/fetchAPI";
 import { articleActions } from "../../store/articles";
-import { CircularProgress } from "@mui/material";
+import Error from "../Error";
 
 export default function CardList() {
   const { articles }: { articles: IArticle[] } = useSelector(
@@ -17,6 +17,9 @@ export default function CardList() {
   );
   const currentPage: number | undefined = useSelector(
     (store: RootState) => store.articles.currentPage,
+  );
+  const loadingError: null | string | undefined = useSelector(
+    (store: RootState) => store.articles.loadingError,
   );
   const { turnPage } = articleActions;
   const pageCount: number = Math.ceil(
@@ -31,8 +34,7 @@ export default function CardList() {
     dispatch(turnPage(page));
     fetchArticles(dispatch, page);
   };
-  if (articles.length == 0)
-    return <CircularProgress className={classes.spinner} />;
+  if (loadingError) return <Error errorMessage={loadingError} />;
   else {
     return (
       <>

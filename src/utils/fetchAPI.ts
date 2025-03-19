@@ -7,10 +7,11 @@ import axios from "axios";
 const BASE: string = "https://blog-platform.kata.academy/api";
 
 type ArticleAction = ReturnType<typeof articleActions.addArticles>;
+type ArticleErr = ReturnType<typeof articleActions.setError>;
 type UAction = ReturnType<typeof userActions.addUser>;
 
 export async function fetchArticles(
-  dispatch: (action: ArticleAction) => void,
+  dispatch: (action: ArticleAction | ArticleErr) => void,
   page: number | null = null,
 ) {
   try {
@@ -23,28 +24,50 @@ export async function fetchArticles(
     if (res.ok) {
       const article: IArticlesObject = await res.json();
       dispatch(articleActions.addArticles(article));
-
+      dispatch(articleActions.setError(null));
       if (article.articlesCount === 0) {
         return;
       }
     }
   } catch (error) {
-    throw new Error("Error fetching articles: " + error);
+    if (error instanceof Error) {
+      dispatch(articleActions.setError(error.message));
+    } else {
+      dispatch(
+        articleActions.setError("Network error. Please try again later"),
+      );
+    }
   }
 }
 
-export async function fetchThisArticle(slug: string | null = null) {
+export async function fetchThisArticle(
+  slug: string | null = null,
+  dispatch: (action: ArticleErr) => void,
+) {
   try {
     let res = null;
     if (slug) {
       res = await axios.get(`${BASE}/articles/${slug}`);
     }
-    if (res && res.status === 200) {
-      return res.data;
+    if (res) {
+      if (res.status === 200) {
+        dispatch(articleActions.setError(null));
+        return res.data;
+      } else {
+        dispatch(
+          articleActions.setError(
+            "Could not find this article. Status" + res.status,
+          ),
+        );
+      }
     }
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error("Error fetching article: " + error.message);
+      dispatch(
+        articleActions.setError("Error fetching article: " + error.message),
+      );
+    } else {
+      dispatch(articleActions.setError("Could not find this article"));
     }
   }
 }
@@ -74,7 +97,7 @@ export async function newUserSignUp(
       const data = await res.json();
       const token = data.user.token;
       localStorage.setItem("token", token);
-      localStorage.setItem("tokenExpiry", String(Date.now() + 864e5));
+      localStorage.setItem("tokenExpiry", String(Date.now() + 864e5)); // 24 hours
 
       dispatch(
         userActions.addUser({
@@ -120,7 +143,7 @@ export async function userSignIn(
       const data = await res.json();
       const token = data.user.token;
       localStorage.setItem("token", token);
-      localStorage.setItem("tokenExpiry", String(Date.now() + 864e5));
+      localStorage.setItem("tokenExpiry", String(Date.now() + 864e5)); // 24 hours
 
       dispatch(
         userActions.addUser({
@@ -134,8 +157,11 @@ export async function userSignIn(
     } else if (res.status === 422) {
       return { success: false, message: "Invalid data - login failed" };
     }
-  } catch {
-    return { success: false, message: "Login failed" };
+  } catch (err) {
+    if (err instanceof Error) {
+      return { success: false, message: "Login failed: " + err.message };
+    }
+    return { success: false, message: "Login failed: Unknown error occurred" };
   }
 }
 
@@ -143,7 +169,6 @@ export async function updateProfile(
   dispatch: (action: UAction) => void,
   info: FieldValues,
 ) {
-  let res: Response;
   const { uname, email, password, avatar } = info;
   const updatedUser = {
     user: {
@@ -156,7 +181,7 @@ export async function updateProfile(
   const token: string | null = localStorage.getItem("token");
   try {
     if (token) {
-      res = await fetch(`${BASE}/user`, {
+      const res: Response = await fetch(`${BASE}/user`, {
         method: "PUT",
         headers: {
           "Content-type": "application/json",
@@ -176,10 +201,13 @@ export async function updateProfile(
             isLoggedIn: true,
           }),
         );
+        return { success: true, message: "" };
+      } else if (res.status === 422) {
+        return { success: false, message: "Invalid data - update failed" };
       }
     }
-  } catch (error) {
-    throw new Error("Error registering new user: " + error);
+  } catch {
+    return { success: false, message: "Update failed" };
   }
 }
 
@@ -195,6 +223,7 @@ export async function startUp(dispatch: (action: UAction) => void) {
       }),
     );
     console.log("clean up");
+    return;
   }
   const token = localStorage.getItem("token");
   try {
@@ -220,6 +249,17 @@ export async function startUp(dispatch: (action: UAction) => void) {
       );
     }
   } catch {
-    console.log("session has expired");
+    console.warn("Previous session has expired");
   }
+}
+
+export async function logOut(dispatch: (action: UAction) => void) {
+  localStorage.clear();
+  dispatch(
+    userActions.addUser({
+      isLoggedIn: false,
+      uname: "",
+      email: "",
+    }),
+  );
 }

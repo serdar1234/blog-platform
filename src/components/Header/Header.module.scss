@@ -2,22 +2,25 @@ $green: #52c41a;
 
 .appBar {
   background-color: white !important;
-  .blogLogo,
-  .profileLogo {
+  .blogLogo {
     text-decoration: none;
-    color: black;
+    color: #000000d9;
     &:hover {
       color: $green;
     }
   }
   .profileLogo {
+    text-decoration: none;
     display: flex;
     align-items: center;
+    &:hover {
+      color: $green;
+    }
   }
   button,
   h6 {
     text-transform: capitalize;
-    color: black;
+    color: #000000d9;
     font-family: Inter;
     font-weight: 400;
     font-size: 18px;
@@ -35,7 +38,7 @@ $green: #52c41a;
     border: 1px solid $green;
   }
   .logOut {
-    color: black;
-    border: 1px solid black;
+    color: #000000bf;
+    border: 1px solid #000000bf;
   }
 }

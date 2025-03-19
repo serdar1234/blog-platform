@@ -1,4 +1,5 @@
 $semiBlack: 000000bf;
+$green: #52c41a;
 
 .title {
   display: inline-flex;
@@ -42,6 +43,7 @@ span.text {
   height: 56px;
   h6 {
     margin: 0;
+    text-transform: capitalize;
     font-family: Inter;
     font-weight: 400;
     font-size: 18px;
@@ -52,6 +54,7 @@ span.text {
   }
 
   time {
+    color: #888;
     font-family: Inter;
     font-weight: 400;
     font-size: 12px;
@@ -65,4 +68,29 @@ span.text {
     width: 46px;
     height: 46px;
   }
+}
+
+button.deleteBtn,
+button.editBtn {
+  margin-left: 12px;
+  border: 1px solid $green;
+  a {
+    text-transform: capitalize;
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+button.deleteBtn {
+  border-color: #f5222d;
+}
+
+// for testing
+.articleBtns {
+  outline: 2px dashed palevioletred;
+  background-color: rgba(216, 112, 147, 0.1);
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  height: 56px;
 }

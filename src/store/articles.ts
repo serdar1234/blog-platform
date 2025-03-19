@@ -5,6 +5,7 @@ const initialStateArticles: IArticlesObject = {
   articles: [],
   articlesCount: 0,
   currentPage: 1,
+  loadingError: null,
 };
 
 const articleSlice = createSlice({
@@ -19,6 +20,9 @@ const articleSlice = createSlice({
     },
     turnPage: (state, action: { payload: number }) => {
       state.currentPage = action.payload;
+    },
+    setError: (state, action: { payload: null | string }) => {
+      state.loadingError = action.payload;
     },
   },
 });

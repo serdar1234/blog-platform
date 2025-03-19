@@ -1,4 +1,4 @@
-export default function truncateStr(str: string, length = 60): string {
+export default function truncateStr(str: string, length = 52): string {
   if (str.length <= length) return str;
 
   let shortStr: string = str.slice(0, length);

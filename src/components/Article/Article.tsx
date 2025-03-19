@@ -7,7 +7,7 @@ import classes from "./Article.module.scss";
 import Preview from "../Preview";
 import { IArticle, RootState } from "../../types/interfaces.ts";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Error from "../Error/Error.tsx";
 import truncateStr from "../../utils/truncateStr.ts";
 import { fetchThisArticle } from "../../utils/fetchAPI.ts";
@@ -15,6 +15,7 @@ import { CircularProgress } from "@mui/material";
 
 const Article: React.FC = () => {
   const arts = useSelector((state: RootState) => state.articles.articles);
+  const dispatch = useDispatch();
   const { slug } = useParams();
   const [info, setInfo] = useState<IArticle | undefined | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -24,7 +25,7 @@ const Article: React.FC = () => {
       setInfo(articleInStore);
       setIsLoading(false);
     } else {
-      fetchThisArticle(slug)
+      fetchThisArticle(slug, dispatch)
         .then((res) => {
           if (res) {
             const thisArticle = res.article;

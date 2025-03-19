@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Link, NavLink } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { articleActions } from "../../store/articles";
+import { logOut } from "../../utils/fetchAPI";
 import { fetchArticles } from "../../utils/fetchAPI";
 import stringAvatar from "../../utils/stringAvatar";
 import { RootState } from "../../types/interfaces";
@@ -24,7 +25,7 @@ export default function Header() {
   };
   const user = useSelector((store: RootState) => store.user);
   const handleLogOut = () => {
-    //
+    logOut(dispatch);
   };
   console.log("isLoggedIn", user.isLoggedIn);
 
@@ -39,11 +40,17 @@ export default function Header() {
           </Typography>
           {user.isLoggedIn ? (
             <>
-              <Link
-                to="/profile"
-                className={classes.profileLogo}
-                onClick={turnPageOne}
+              <Button
+                type="button"
+                size="small"
+                variant="outlined"
+                className={classes.signUpBtn}
               >
+                <Link to={"/"} onClick={() => {}}>
+                  Create article
+                </Link>
+              </Button>
+              <NavLink to="/profile" className={classes.profileLogo}>
                 <Typography
                   variant="h6"
                   component="h6"
@@ -51,7 +58,7 @@ export default function Header() {
                 >
                   {user.uname}
                 </Typography>
-                {!user.avatar && (
+                {!user.avatar && !imgState && (
                   <Avatar {...stringAvatar(user.uname)} alt={user.uname} />
                 )}
                 <Avatar
@@ -61,8 +68,9 @@ export default function Header() {
                   alt="Your profile image"
                   style={{ display: imgState ? "block" : "none" }}
                 />
-              </Link>
+              </NavLink>
               <Button
+                size="large"
                 type="button"
                 variant="outlined"
                 className={classes.logOut}
@@ -74,11 +82,11 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Button type="button">
+              <Button type="button" size="large">
                 <NavLink
                   to={"/sign-in"}
                   style={({ isActive }) => ({
-                    color: isActive ? "red" : "#000",
+                    color: isActive ? "#f5222d" : "#000",
                   })}
                 >
                   Sign In
@@ -87,7 +95,8 @@ export default function Header() {
               <Button
                 type="button"
                 variant="outlined"
-                className={classes.signUp__btn}
+                size="large"
+                className={classes.signUpBtn}
               >
                 <Link to={"/sign-up"}>Sign Up</Link>
               </Button>

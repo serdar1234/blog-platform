@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Markdown from "../Markdown";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { IArticleProps } from "../../types/interfaces";
+import { IArticleProps, RootState } from "../../types/interfaces";
 import convertDate from "../../utils/convertDate";
 import truncateStr from "../../utils/truncateStr";
 
@@ -14,9 +14,13 @@ import { useState } from "react";
 import stringAvatar from "../../utils/stringAvatar";
 import { Link } from "react-router";
 import Tags from "../Tags";
+import { useSelector } from "react-redux";
+import { Button } from "@mui/material";
 
 const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
   const [imgState, setImgState] = useState<boolean>(false);
+  const user = useSelector((store: RootState) => store.user);
+  const isAuthor: boolean = user.uname !== info.author.username;
   return (
     <>
       <Grid component="div" size={9.6} style={{ height: "50%" }}>
@@ -36,7 +40,7 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
           <FavoriteBorderIcon fontSize="small" className={classes.heart} />
           {info.favoritesCount}
         </span>
-        <Tags tags={info.tagList} />
+        <Tags tags={type ? info.tagList : info.tagList.slice(0, 7)} />
       </Grid>
       <Grid className={classes.avatar} size={2.4}>
         <div>
@@ -59,9 +63,37 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
       </Grid>
       <Grid component="div" size={9.6}>
         <Typography className={classes.text} component="span">
-          <Markdown>{info.description}</Markdown>
+          <Markdown>
+            {type ? info.description : truncateStr(info.description, 175)}
+          </Markdown>
         </Typography>
       </Grid>
+      {type && user.isLoggedIn && isAuthor && (
+        <Grid className={classes.articleBtns} size={2.4}>
+          <Button
+            type="button"
+            size="small"
+            color="error"
+            variant="outlined"
+            className={classes.deleteBtn}
+          >
+            <Link to={"/"} onClick={() => {}}>
+              Delete
+            </Link>
+          </Button>
+          <Button
+            type="button"
+            size="small"
+            color="success"
+            variant="outlined"
+            className={classes.editBtn}
+          >
+            <Link to={`/articles/${info.slug}/edit`} onClick={() => {}}>
+              Edit
+            </Link>
+          </Button>
+        </Grid>
+      )}
     </>
   );
 };

@@ -18,7 +18,6 @@ export interface IAuthor {
 export interface IArticle {
   slug: string;
   title: string;
-  // content: string;
   description: string;
   body: string;
   tagList: string[];
@@ -40,13 +39,11 @@ export type UserType = UserRequiredFields &
   Partial<Record<"avatar", string>> &
   Record<"isLoggedIn", boolean>; // +avatar is optional
 
-// type UPass = "uname" | "email" | "password" | "password2";
-// export type TSignUp = Record<UPass, string>;
-
 export interface IArticlesObject {
   articles: IArticle[];
   articlesCount: number;
   currentPage?: number;
+  loadingError?: null | string;
 }
 
 export interface PayloadAction {

@@ -43,7 +43,7 @@ const Article: React.FC = () => {
   }, [slug, arts, dispatch]);
   if (isLoading) return <CircularProgress />;
   return (
-    <Paper className={classes.card} elevation={4}>
+    <Paper component="section" className={classes.card} elevation={4}>
       {info && (
         <Grid container columnSpacing={2} rowSpacing={1}>
           <meta name="author" content={info.author.username} />

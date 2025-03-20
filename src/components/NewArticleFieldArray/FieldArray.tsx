@@ -1,9 +1,10 @@
 import {
-  useForm,
+  FieldErrors,
   useFieldArray,
   Control,
   FieldValues,
   UseFormRegister,
+  SetValueConfig,
 } from "react-hook-form";
 
 import InputField from "../Input";
@@ -13,11 +14,9 @@ import classes from "./FieldArray.module.scss";
 const FieldArray: React.FC<{
   control: Control<FieldValues>;
   register: UseFormRegister<FieldValues>;
-}> = ({ control, register }) => {
-  const {
-    setValue,
-    formState: { errors },
-  } = useForm({});
+  setValue: (name: string, value: unknown, config?: SetValueConfig) => void;
+  errors: FieldErrors<FieldValues>;
+}> = ({ control, register, setValue, errors }) => {
   const { fields, append, remove } = useFieldArray({
     name: "tagList",
     control,
@@ -36,7 +35,6 @@ const FieldArray: React.FC<{
             <InputField
               name={`tagList.${index}.tag`}
               fullWidth={false}
-              required={false}
               label=""
               register={register}
               errors={errors}
@@ -50,7 +48,10 @@ const FieldArray: React.FC<{
               type="button"
               disableElevation
               onClick={() => {
-                remove(index);
+                if (array.length == 1) {
+                  console.log(132131);
+                  setValue(`tagList.0.tag`, "");
+                } else remove(index);
               }}
               className={`${classes.delBtn} ${classes.btn}`}
             >

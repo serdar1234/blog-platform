@@ -109,6 +109,10 @@ const Article: React.FC = () => {
           minRows={6}
           rules={{
             required: "Article text is required",
+            minLength: {
+              value: 15,
+              message: "Please ensure the text is at least 15 characters long.",
+            },
           }}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             handleChange("textField", e)
@@ -155,7 +159,12 @@ const Article: React.FC = () => {
         >
           Add tag
         </Button> */}
-        <FieldArray control={control} register={register} />
+        <FieldArray
+          control={control}
+          register={register}
+          setValue={setValue}
+          errors={errors}
+        />
         {errorMessage && (
           <Alert
             severity="error"

@@ -10,6 +10,7 @@ const InputField: React.FC<InputFieldProps> = ({
   rules,
   ...otherProps
 }) => {
+  console.log(errors, name);
   return (
     <>
       <label htmlFor={name}>{label}</label>

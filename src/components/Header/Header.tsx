@@ -31,7 +31,12 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" elevation={0} className={classes.appBar}>
+      <AppBar
+        position="static"
+        elevation={0}
+        className={classes.appBar}
+        component={"header"}
+      >
         <Toolbar>
           <Typography variant="h6" component="h6" sx={{ flexGrow: 1 }}>
             <Link to="/" className={classes.blogLogo} onClick={turnPageOne}>

@@ -1,0 +1,43 @@
+$red: #f5222d;
+$blue: #1976d2;
+
+label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0%;
+  margin-bottom: -6px;
+  margin-top: 20px;
+}
+input {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0%;
+  height: 21px;
+}
+.btn {
+  text-transform: capitalize;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  text-align: center;
+}
+button.addBtn {
+  border-color: $blue;
+  color: $blue;
+}
+button.delBtn {
+  border-color: $red;
+  color: $red;
+}
+button.addBtn,
+button.delBtn {
+  width: 120px;
+  height: 38px;
+  margin: 8px 0 0 12px;
+}
+.tagsDiv {
+  display: flex;
+}

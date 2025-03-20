@@ -5,6 +5,7 @@ import Article from "../components/Article";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 import Profile from "../components/Profile";
+import NewArticle from "../components/NewArticle";
 
 const Root: React.FC = () => {
   return (
@@ -15,11 +16,8 @@ const Root: React.FC = () => {
         <Route path="sign-in" element={<SignIn />} />
         <Route path="profile" element={<Profile />} />
         <Route path="articles" element={<CardList />} />
-        <Route
-          path="/articles/:slug"
-          element={<Article />}
-          // errorElement={<h1>sdfsfsdf</h1>}
-        />
+        <Route path="/articles/:slug" element={<Article />} />
+        <Route path="/new-article" element={<NewArticle />} />
       </Route>
     </Routes>
   );

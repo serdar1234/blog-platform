@@ -40,7 +40,7 @@ const Article: React.FC = () => {
           return <Error errorMessage={error.message} />;
         });
     }
-  }, [slug, arts]);
+  }, [slug, arts, dispatch]);
   if (isLoading) return <CircularProgress />;
   return (
     <Paper className={classes.card} elevation={4}>

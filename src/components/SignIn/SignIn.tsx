@@ -12,6 +12,7 @@ import { userSignIn } from "../../utils/fetchAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../types/interfaces";
 import { Alert } from "@mui/material";
+import FormTitle from "../FormTitle";
 
 export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -42,7 +43,7 @@ export default function SignIn() {
   return (
     <Grid className={classes.grid}>
       <Paper elevation={5} className={classes.paper}>
-        <h2 className={classes.head}>Sign In</h2>
+        <FormTitle>Sign in</FormTitle>
         <form className={classes.form} onSubmit={handleSubmit(submitForm)}>
           <InputField
             label="Email address"

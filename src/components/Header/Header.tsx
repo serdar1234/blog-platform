@@ -46,7 +46,7 @@ export default function Header() {
                 variant="outlined"
                 className={classes.signUpBtn}
               >
-                <Link to={"/"} onClick={() => {}}>
+                <Link to={"/new-article"} onClick={() => {}}>
                   Create article
                 </Link>
               </Button>

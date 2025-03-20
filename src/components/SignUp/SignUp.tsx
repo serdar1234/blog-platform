@@ -12,6 +12,7 @@ import classes from "./SignUp.module.scss";
 import { newUserSignUp } from "../../utils/fetchAPI";
 import { useDispatch } from "react-redux";
 import { Alert } from "@mui/material";
+import FormTitle from "../FormTitle";
 
 export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -46,7 +47,7 @@ export default function SignUp() {
   return (
     <Grid className={classes.grid}>
       <Paper elevation={5} className={classes.paper}>
-        <h2 className={classes.head}>Create new account</h2>
+        <FormTitle>Create new account</FormTitle>
         <form className={classes.form} onSubmit={handleSubmit(submitForm)}>
           <InputField
             label="Username"

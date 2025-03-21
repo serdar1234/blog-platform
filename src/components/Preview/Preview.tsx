@@ -75,11 +75,10 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
             size="small"
             color="error"
             variant="outlined"
+            onClick={() => confirm("sure?")}
             className={classes.deleteBtn}
           >
-            <Link to={"/"} onClick={() => {}}>
-              Delete
-            </Link>
+            <span>Delete</span>
           </Button>
           <Button
             type="button"

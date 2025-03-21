@@ -3,19 +3,25 @@ import Paper from "@mui/material/Paper";
 import classes from "./NewArticle.module.scss";
 import FormTitle from "../FormTitle";
 import { useForm, FieldValues } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { createArticle, fetchThisArticle } from "../../utils/fetchAPI";
+import {
+  createArticle,
+  fetchThisArticle,
+  updateArticle,
+} from "../../utils/fetchAPI";
 import InputField from "../Input";
 import { Alert, Button } from "@mui/material";
 import FieldArray from "../NewArticleFieldArray";
-import { IArticle } from "../../types/interfaces";
+import { IArticle, RootState } from "../../types/interfaces";
 import ErrorComponent from "../Error";
 
 const Article: React.FC<{ editMode?: boolean }> = ({ editMode = false }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [info, setInfo] = useState<IArticle | undefined>(undefined);
-
+  const currentPage: number | undefined = useSelector(
+    (store: RootState) => store.articles.currentPage,
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { slug } = useParams();
@@ -50,19 +56,35 @@ const Article: React.FC<{ editMode?: boolean }> = ({ editMode = false }) => {
   }, [dispatch, editMode, slug]);
 
   useEffect(() => {
+    if (editMode) {
+      setValue("title", info?.title);
+      setValue("description", info?.description);
+      setValue("body", info?.body);
+    }
     const tags = info?.tagList.map((x) => ({ tag: x }));
-    if (tags) {
+    console.log(tags);
+    if (tags && tags?.length > 0) {
       setValue("tagList", tags);
     } else setValue("tagList", [{ tag: "" }]);
   }, [info, setValue]);
+
   console.log(info?.tagList);
   const submitForm = async (data: FieldValues) => {
-    const result: { success: boolean; message: string } | undefined =
-      await createArticle(dispatch, data);
-    if (result && result.success) {
-      navigate("/");
-    } else if (result && !result.success) {
-      setErrorMessage(result.message);
+    let result: { success: boolean; message: string } | undefined;
+    if (editMode) {
+      result = await updateArticle(dispatch, data, slug, currentPage);
+      if (result && result.success) {
+        navigate("/");
+      } else if (result && !result.success) {
+        setErrorMessage(result.message);
+      }
+    } else {
+      result = await createArticle(dispatch, data);
+      if (result && result.success) {
+        navigate("/");
+      } else if (result && !result.success) {
+        setErrorMessage(result.message);
+      }
     }
   };
   const handleChange = (n: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +100,6 @@ const Article: React.FC<{ editMode?: boolean }> = ({ editMode = false }) => {
           name="title"
           register={register}
           errors={errors}
-          defaultValue={info && info.title}
           rules={{
             required: "Title is required",
             minLength: {

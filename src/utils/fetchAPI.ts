@@ -3,6 +3,7 @@ import { articleActions } from "../store/articles";
 import { userActions } from "../store/user";
 import { IArticlesObject } from "../types/interfaces";
 import axios from "axios";
+import filterTags from "./filterTags";
 
 const BASE: string = "https://blog-platform.kata.academy/api";
 
@@ -269,11 +270,7 @@ export async function createArticle(
   info: FieldValues,
 ) {
   const { title, description, body, tagList } = info;
-  let filteredTags: string[] = tagList
-    .map((entity: { tag: string }) => entity.tag)
-    .filter((x: string) => x.trim() !== "");
-  const s = new Set(filteredTags);
-  filteredTags = Array.from(s);
+  const filteredTags: string[] = filterTags(tagList);
   const articleData = {
     article: {
       title,
@@ -311,6 +308,91 @@ export async function createArticle(
       success: false,
       message:
         "We’re sorry, but there was an issue while trying to post your article.",
+    };
+  }
+}
+
+export async function updateArticle(
+  dispatch: (action: ArticleAction | ArticleErr) => void,
+  info: FieldValues,
+  slug?: string,
+  currentPage?: number,
+) {
+  const { title, description, body, tagList } = info;
+  const filteredTags: string[] = filterTags(tagList);
+  const articleData = {
+    article: {
+      title,
+      description,
+      body,
+      tagList: filteredTags,
+    },
+  };
+  const token: string | null = localStorage.getItem("token");
+  try {
+    if (token) {
+      const res: Response = await fetch(`${BASE}/articles/${slug}`, {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(articleData),
+      });
+
+      if (res.ok) {
+        console.log("article successfully updated");
+        fetchArticles(dispatch, currentPage);
+        return { success: true, message: "" };
+      } else {
+        const data = await res.json();
+        return {
+          success: false,
+          message: `Failed to update the article. ${data[0].message}`,
+        };
+      }
+    }
+  } catch {
+    return {
+      success: false,
+      message:
+        "We’re sorry, but there was an issue while trying to update your article.",
+    };
+  }
+}
+
+export async function deleteArticle(
+  dispatch: (action: ArticleAction | ArticleErr) => void,
+  slug?: string,
+  currentPage?: number,
+) {
+  const token: string | null = localStorage.getItem("token");
+  try {
+    if (token) {
+      const res: Response = await fetch(`${BASE}/articles/${slug}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        console.log("article successfully deleted");
+        fetchArticles(dispatch, currentPage);
+        return { success: true, message: "" };
+      } else {
+        const data = await res.json();
+        return {
+          success: false,
+          message: `Failed to delete the article. ${data[0]}`,
+        };
+      }
+    }
+  } catch {
+    return {
+      success: false,
+      message:
+        "We’re sorry, but there was an issue while trying to delete your article.",
     };
   }
 }

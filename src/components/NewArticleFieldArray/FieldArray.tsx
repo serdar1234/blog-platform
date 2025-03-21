@@ -10,6 +10,7 @@ import {
 import InputField from "../Input";
 import { Button } from "@mui/material";
 import classes from "./FieldArray.module.scss";
+import { useState } from "react";
 
 const FieldArray: React.FC<{
   control: Control<FieldValues>;
@@ -21,7 +22,7 @@ const FieldArray: React.FC<{
     name: "tagList",
     control,
   });
-
+  const [isEmptyTag, setIsEmptyTag] = useState<boolean>(true);
   const handleChange = (n: string, e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(n, e.target.value.trimStart());
   };
@@ -39,9 +40,12 @@ const FieldArray: React.FC<{
               register={register}
               errors={errors}
               placeholder="tag"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleChange(`tagList.${index}.tag`, e)
-              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.value.length < 2) {
+                  setIsEmptyTag(true);
+                } else setIsEmptyTag(false);
+                handleChange(`tagList.${index}.tag`, e);
+              }}
             />
             <Button
               variant="outlined"
@@ -61,9 +65,11 @@ const FieldArray: React.FC<{
               <Button
                 variant="outlined"
                 size="large"
+                disabled={isEmptyTag}
                 type="button"
                 disableElevation
                 onClick={() => {
+                  setIsEmptyTag(true);
                   append({ tag: "" });
                 }}
                 className={`${classes.addBtn} ${classes.btn}`}

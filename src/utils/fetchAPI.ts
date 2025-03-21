@@ -249,7 +249,7 @@ export async function startUp(dispatch: (action: UAction) => void) {
       );
     }
   } catch {
-    console.warn("Previous session has expired");
+    console.warn("Your previous session expired");
   }
 }
 
@@ -264,14 +264,22 @@ export async function logOut(dispatch: (action: UAction) => void) {
   );
 }
 
-export async function createArticle(info: FieldValues) {
+export async function createArticle(
+  dispatch: (action: ArticleAction | ArticleErr) => void,
+  info: FieldValues,
+) {
   const { title, description, body, tagList } = info;
+  let filteredTags: string[] = tagList
+    .map((entity: { tag: string }) => entity.tag)
+    .filter((x: string) => x.trim() !== "");
+  const s = new Set(filteredTags);
+  filteredTags = Array.from(s);
   const articleData = {
     article: {
       title,
       description,
       body,
-      tagList: tagList.map((entity: { tag: string }) => entity.tag),
+      tagList: filteredTags,
     },
   };
   const token: string | null = localStorage.getItem("token");
@@ -288,6 +296,7 @@ export async function createArticle(info: FieldValues) {
 
       if (res.ok) {
         console.log("article successfully created");
+        fetchArticles(dispatch);
         return { success: true, message: "" };
       } else {
         const data = await res.json();

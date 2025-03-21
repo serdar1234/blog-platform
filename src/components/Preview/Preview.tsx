@@ -20,7 +20,7 @@ import { Button } from "@mui/material";
 const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
   const [imgState, setImgState] = useState<boolean>(false);
   const user = useSelector((store: RootState) => store.user);
-  const isAuthor: boolean = user.uname !== info.author.username;
+  const isAuthor: boolean = user.uname === info.author.username;
   return (
     <>
       <Grid component="div" size={9.6} style={{ height: "50%" }}>

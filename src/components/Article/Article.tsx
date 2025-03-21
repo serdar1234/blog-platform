@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
-import Markdown from "../Markdown";
+import CircularProgress from "@mui/material/CircularProgress";
 import classes from "./Article.module.scss";
 
-import Preview from "../Preview";
 import { IArticle, RootState } from "../../types/interfaces.ts";
-import { useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
-import Error from "../Error/Error.tsx";
+import Markdown from "../Markdown";
+import Preview from "../Preview";
+import Error from "../Error";
 import truncateStr from "../../utils/truncateStr.ts";
 import { fetchThisArticle } from "../../utils/fetchAPI.ts";
-import { CircularProgress } from "@mui/material";
 
 const Article: React.FC = () => {
   const arts = useSelector((state: RootState) => state.articles.articles);

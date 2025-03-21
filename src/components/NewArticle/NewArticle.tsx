@@ -1,28 +1,24 @@
+import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import classes from "./NewArticle.module.scss";
 import FormTitle from "../FormTitle";
 import { useForm, FieldValues } from "react-hook-form";
-// import { useForm, FieldValues, useFieldArray } from "react-hook-form";
-// import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { createArticle } from "../../utils/fetchAPI";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { createArticle, fetchThisArticle } from "../../utils/fetchAPI";
 import InputField from "../Input";
 import { Alert, Button } from "@mui/material";
-import { useState } from "react";
 import FieldArray from "../NewArticleFieldArray";
+import { IArticle } from "../../types/interfaces";
+import ErrorComponent from "../Error";
 
-// interface Tag {
-//   tag: string;
-// }
-// interface FormValues {
-//   title: string; // Add username field
-//   tagList: Tag[];
-// }
-
-const Article: React.FC = () => {
+const Article: React.FC<{ editMode?: boolean }> = ({ editMode = false }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [info, setInfo] = useState<IArticle | undefined>(undefined);
+
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const { slug } = useParams();
   const {
     register,
     control,
@@ -35,10 +31,34 @@ const Article: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    if (editMode) {
+      fetchThisArticle(slug, dispatch)
+        .then((res) => {
+          if (res) {
+            const thisArticle = res.article;
+            setInfo(thisArticle);
+          } else {
+            setInfo(undefined);
+          }
+        })
+        .catch((error) => {
+          setInfo(undefined);
+          return <ErrorComponent errorMessage={error.message} />;
+        });
+    } else setInfo(undefined);
+  }, [dispatch, editMode, slug]);
+
+  useEffect(() => {
+    const tags = info?.tagList.map((x) => ({ tag: x }));
+    if (tags) {
+      setValue("tagList", tags);
+    } else setValue("tagList", [{ tag: "" }]);
+  }, [info, setValue]);
+  console.log(info?.tagList);
   const submitForm = async (data: FieldValues) => {
-    // console.log(data);
     const result: { success: boolean; message: string } | undefined =
-      await createArticle(data);
+      await createArticle(dispatch, data);
     if (result && result.success) {
       navigate("/");
     } else if (result && !result.success) {
@@ -51,13 +71,14 @@ const Article: React.FC = () => {
 
   return (
     <Paper className={classes.card} elevation={4}>
-      <FormTitle>Create new article</FormTitle>
+      <FormTitle>{editMode ? "Edit article" : "Create new article"}</FormTitle>
       <form className={classes.form} onSubmit={handleSubmit(submitForm)}>
         <InputField
           label="Title"
           name="title"
           register={register}
           errors={errors}
+          defaultValue={info && info.title}
           rules={{
             required: "Title is required",
             minLength: {
@@ -77,6 +98,7 @@ const Article: React.FC = () => {
         <InputField
           label="Short description"
           name="description"
+          defaultValue={info && info.description}
           register={register}
           errors={errors}
           rules={{
@@ -100,6 +122,7 @@ const Article: React.FC = () => {
         <InputField
           name="body"
           label="Text"
+          defaultValue={info && info.body}
           register={register}
           errors={errors}
           multiline
@@ -121,6 +144,7 @@ const Article: React.FC = () => {
           register={register}
           setValue={setValue}
           errors={errors}
+          hasDefaultTags={Array.isArray(info?.tagList)}
         />
         {errorMessage && (
           <Alert

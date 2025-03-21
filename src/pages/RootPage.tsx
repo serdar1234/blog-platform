@@ -17,6 +17,10 @@ const Root: React.FC = () => {
         <Route path="profile" element={<Profile />} />
         <Route path="articles" element={<CardList />} />
         <Route path="/articles/:slug" element={<Article />} />
+        <Route
+          path="/articles/:slug/edit"
+          element={<NewArticle editMode={true} />}
+        />
         <Route path="/new-article" element={<NewArticle />} />
       </Route>
     </Routes>

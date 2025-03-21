@@ -10,14 +10,15 @@ import {
 import InputField from "../Input";
 import { Button } from "@mui/material";
 import classes from "./FieldArray.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const FieldArray: React.FC<{
   control: Control<FieldValues>;
   register: UseFormRegister<FieldValues>;
   setValue: (name: string, value: unknown, config?: SetValueConfig) => void;
   errors: FieldErrors<FieldValues>;
-}> = ({ control, register, setValue, errors }) => {
+  hasDefaultTags?: boolean;
+}> = ({ control, register, setValue, errors, hasDefaultTags }) => {
   const { fields, append, remove } = useFieldArray({
     name: "tagList",
     control,
@@ -26,7 +27,10 @@ const FieldArray: React.FC<{
   const handleChange = (n: string, e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(n, e.target.value.trimStart());
   };
-
+  useEffect(() => {
+    if (hasDefaultTags) setIsEmptyTag(false);
+  }, [hasDefaultTags]);
+  console.log("def tags are", hasDefaultTags);
   return (
     <>
       <label>Tags</label>
@@ -35,6 +39,7 @@ const FieldArray: React.FC<{
           <div key={field.id} className={classes.tagsDiv}>
             <InputField
               name={`tagList.${index}.tag`}
+              required={false}
               fullWidth={false}
               label=""
               register={register}
@@ -53,9 +58,12 @@ const FieldArray: React.FC<{
               disableElevation
               onClick={() => {
                 if (array.length == 1) {
-                  console.log(132131);
+                  // clear the input but don't delete if there is only one tag left
                   setValue(`tagList.0.tag`, "");
-                } else remove(index);
+                } else {
+                  remove(index);
+                  setIsEmptyTag(false);
+                }
               }}
               className={`${classes.delBtn} ${classes.btn}`}
             >

@@ -4,7 +4,8 @@ import FormTitle from "../FormTitle";
 import { useForm, FieldValues } from "react-hook-form";
 // import { useForm, FieldValues, useFieldArray } from "react-hook-form";
 // import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { createArticle } from "../../utils/fetchAPI";
 import InputField from "../Input";
 import { Alert, Button } from "@mui/material";
 import { useState } from "react";
@@ -20,7 +21,7 @@ import FieldArray from "../NewArticleFieldArray";
 
 const Article: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const dispatch = useDispatch();
   const {
     register,
@@ -33,20 +34,16 @@ const Article: React.FC = () => {
       tagList: [{ tag: "" }],
     },
   });
-  // const { fields, append, remove } = useFieldArray({
-  //   name: "tagList",
-  //   control,
-  // });
 
   const submitForm = async (data: FieldValues) => {
-    console.log(data);
-    // const result: { success: boolean; message: string } | undefined =
-    //   await newUserSignUp(dispatch, data);
-    // if (result && result.success) {
-    //   navigate("/");
-    // } else if (result && !result.success) {
-    //   setErrorMessage(result.message);
-    // }
+    // console.log(data);
+    const result: { success: boolean; message: string } | undefined =
+      await createArticle(data);
+    if (result && result.success) {
+      navigate("/");
+    } else if (result && !result.success) {
+      setErrorMessage(result.message);
+    }
   };
   const handleChange = (n: string, e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(n, e.target.value.trimStart());
@@ -101,7 +98,7 @@ const Article: React.FC = () => {
           placeholder="Short description"
         />
         <InputField
-          name="textField"
+          name="body"
           label="Text"
           register={register}
           errors={errors}
@@ -115,50 +112,10 @@ const Article: React.FC = () => {
             },
           }}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange("textField", e)
+            handleChange("body", e)
           }
           placeholder="text"
         />
-        {/* <label>Tags</label> */}
-        {/* {fields.map((field, index) => {
-          return (
-            <div key={field.id}>
-              <InputField
-                name={`tagList.${index}.tag`}
-                fullWidth={false}
-                required={false}
-                label=""
-                register={register}
-                errors={errors}
-                placeholder="tag"
-              />
-              <Button
-                variant="outlined"
-                size="large"
-                type="button"
-                disableElevation
-                onClick={() => {
-                  remove(index);
-                }}
-                className={`${classes.delBtn} ${classes.btn}`}
-              >
-                Delete
-              </Button>
-            </div>
-          );
-        })}
-        <Button
-          variant="outlined"
-          size="large"
-          type="button"
-          disableElevation
-          onClick={() => {
-            append({ tag: "" });
-          }}
-          className={`${classes.addBtn} ${classes.btn}`}
-        >
-          Add tag
-        </Button> */}
         <FieldArray
           control={control}
           register={register}

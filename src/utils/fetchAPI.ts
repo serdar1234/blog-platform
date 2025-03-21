@@ -263,3 +263,45 @@ export async function logOut(dispatch: (action: UAction) => void) {
     }),
   );
 }
+
+export async function createArticle(info: FieldValues) {
+  const { title, description, body, tagList } = info;
+  const articleData = {
+    article: {
+      title,
+      description,
+      body,
+      tagList: tagList.map((entity: { tag: string }) => entity.tag),
+    },
+  };
+  const token: string | null = localStorage.getItem("token");
+  try {
+    if (token) {
+      const res: Response = await fetch(`${BASE}/articles`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+        body: JSON.stringify(articleData),
+      });
+
+      if (res.ok) {
+        console.log("article successfully created");
+        return { success: true, message: "" };
+      } else {
+        const data = await res.json();
+        return {
+          success: false,
+          message: `Failed to post the article. ${data[0].message}`,
+        };
+      }
+    }
+  } catch {
+    return {
+      success: false,
+      message:
+        "We’re sorry, but there was an issue while trying to post your article.",
+    };
+  }
+}

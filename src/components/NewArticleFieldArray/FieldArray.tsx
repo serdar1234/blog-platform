@@ -57,7 +57,6 @@ const FieldArray: React.FC<{
               disableElevation
               onClick={() => {
                 if (array.length == 1) {
-                  // clear the input but don't delete if there is only one tag left
                   setValue(`tagList.0.tag`, "");
                 } else {
                   remove(index);

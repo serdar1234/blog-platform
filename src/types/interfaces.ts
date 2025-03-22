@@ -37,7 +37,7 @@ type U = "uname" | "email" | "avatar";
 export type UserRequiredFields = Record<Exclude<U, "avatar">, string>; // all are required, -avatar
 export type UserType = UserRequiredFields &
   Partial<Record<"avatar", string>> &
-  Record<"isLoggedIn", boolean>; // +avatar is optional
+  Record<"isLoggedIn", boolean>;
 
 export interface IArticlesObject {
   articles: IArticle[];

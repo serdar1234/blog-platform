@@ -1,17 +1,18 @@
-$semiBlack: 000000bf;
+$semiBlack: #000000bf;
 $green: #52c41a;
 
 .title {
   display: inline-flex;
   max-width: 90%;
+  font-family: Inter !important;
+
   a {
     text-decoration: none;
+    color: #1976d2;
+    &:visited {
+      color: #1976d2;
+    }
   }
-}
-
-.stackChips div {
-  border-radius: 3px;
-  border: 1px solid #000;
 }
 
 .likeSpan {
@@ -25,7 +26,10 @@ $green: #52c41a;
   position: relative;
   top: 3px;
   color: $semiBlack;
-  // color: #e91e63;  // pink heart
+}
+
+.heart.favored {
+  color: #e91e63; // pink heart
 }
 
 span.text {
@@ -34,6 +38,7 @@ span.text {
   font-size: 12px;
   line-height: 22px;
   letter-spacing: 0px;
+  color: $semiBlack;
 }
 
 .avatar {

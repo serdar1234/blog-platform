@@ -27,7 +27,6 @@ export default function Header() {
   const handleLogOut = () => {
     logOut(dispatch);
   };
-  console.log("isLoggedIn", user.isLoggedIn);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

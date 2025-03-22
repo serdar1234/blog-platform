@@ -41,6 +41,7 @@ const Article: React.FC = () => {
         });
     }
   }, [slug, arts, dispatch]);
+
   if (isLoading) return <CircularProgress />;
   return (
     <Paper component="section" className={classes.card} elevation={4}>

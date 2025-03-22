@@ -27,7 +27,6 @@ export default function SignIn() {
   } = useForm({});
 
   const submitForm = async (data: FieldValues) => {
-    console.log(data);
     const result: { success: boolean; message: string } | undefined =
       await userSignIn(dispatch, data);
     if (result && result.success) {

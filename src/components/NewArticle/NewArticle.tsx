@@ -66,7 +66,6 @@ const Article: React.FC<{ editMode?: boolean }> = ({ editMode = false }) => {
       setValue("body", "");
     }
     const tags = info?.tagList.map((x) => ({ tag: x }));
-    console.log(tags);
     if (tags && tags?.length > 0) {
       setValue("tagList", tags);
     } else setValue("tagList", [{ tag: "" }]);

@@ -4,6 +4,7 @@ import { userActions } from "../store/user";
 import { IArticlesObject } from "../types/interfaces";
 import axios from "axios";
 import filterTags from "./filterTags";
+import getToken from "./getToken";
 
 const BASE: string = "https://blog-platform.kata.academy/api";
 
@@ -17,10 +18,14 @@ export async function fetchArticles(
 ) {
   try {
     let res: Response;
+
     if (page) {
-      res = await fetch(`${BASE}/articles?limit=5&offset=${(page - 1) * 5}`);
+      res = await fetch(
+        `${BASE}/articles?limit=5&offset=${(page - 1) * 5}`,
+        getToken(),
+      );
     } else {
-      res = await fetch(`${BASE}/articles?limit=5`);
+      res = await fetch(`${BASE}/articles?limit=5`, getToken());
     }
     if (res.ok) {
       const article: IArticlesObject = await res.json();
@@ -48,7 +53,7 @@ export async function fetchThisArticle(
   try {
     let res = null;
     if (slug) {
-      res = await axios.get(`${BASE}/articles/${slug}`);
+      res = await axios.get(`${BASE}/articles/${slug}`, getToken());
     }
     if (res) {
       if (res.status === 200) {
@@ -77,7 +82,6 @@ export async function newUserSignUp(
   dispatch: (action: UAction) => void,
   info: FieldValues,
 ) {
-  let res: Response;
   const { uname, email, password } = info;
   const newUser = {
     user: {
@@ -87,15 +91,15 @@ export async function newUserSignUp(
     },
   };
   try {
-    res = await fetch(`${BASE}/users`, {
+    const response: Response = await fetch(`${BASE}/users`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
       body: JSON.stringify(newUser),
     });
-    if (res.ok) {
-      const data = await res.json();
+    if (response.ok) {
+      const data = await response.json();
       const token = data.user.token;
       localStorage.setItem("token", token);
       localStorage.setItem("tokenExpiry", String(Date.now() + 864e5)); // 24 hours
@@ -108,8 +112,8 @@ export async function newUserSignUp(
         }),
       );
       return { success: true, message: "" };
-    } else if (res.status === 422) {
-      const data = await res.json();
+    } else if (response.status === 422) {
+      const data = await response.json();
       let message: string;
       if (data.errors.username) message = "Username " + data.errors.username;
       else message = "Email " + data.errors.email;
@@ -124,7 +128,6 @@ export async function userSignIn(
   dispatch: (action: UAction) => void,
   info: FieldValues,
 ) {
-  let res: Response;
   const { email, password } = info;
   const existingUser = {
     user: {
@@ -133,7 +136,7 @@ export async function userSignIn(
     },
   };
   try {
-    res = await fetch(`${BASE}/users/login`, {
+    const res: Response = await fetch(`${BASE}/users/login`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -223,7 +226,6 @@ export async function startUp(dispatch: (action: UAction) => void) {
         email: "",
       }),
     );
-    console.log("clean up");
     return;
   }
   const token = localStorage.getItem("token");
@@ -238,7 +240,6 @@ export async function startUp(dispatch: (action: UAction) => void) {
       const token = data.user.token;
       localStorage.setItem("token", token);
       localStorage.setItem("tokenExpiry", String(Date.now() + 864e5));
-      console.log("start up");
 
       dispatch(
         userActions.addUser({
@@ -292,7 +293,6 @@ export async function createArticle(
       });
 
       if (res.ok) {
-        console.log("article successfully created");
         fetchArticles(dispatch);
         return { success: true, message: "" };
       } else {
@@ -341,7 +341,6 @@ export async function updateArticle(
       });
 
       if (res.ok) {
-        console.log("article successfully updated");
         fetchArticles(dispatch, currentPage);
         return { success: true, message: "" };
       } else {
@@ -377,7 +376,6 @@ export async function deleteArticle(
       });
 
       if (res.ok) {
-        console.log("article successfully deleted");
         fetchArticles(dispatch, currentPage);
         return { success: true, message: "" };
       } else {
@@ -393,6 +391,76 @@ export async function deleteArticle(
       success: false,
       message:
         "We’re sorry, but there was an issue while trying to delete your article.",
+    };
+  }
+}
+
+export async function favorArticle(
+  dispatch: (action: ArticleAction | ArticleErr) => void,
+  slug?: string,
+  currentPage?: number,
+) {
+  const token: string | null = localStorage.getItem("token");
+  try {
+    if (token) {
+      const res: Response = await fetch(`${BASE}/articles/${slug}/favorite`, {
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        fetchArticles(dispatch, currentPage);
+        return { success: true, message: "" };
+      } else {
+        const data = await res.json();
+        return {
+          success: false,
+          message: `Failed to add the like to the article. ${data[0]}`,
+        };
+      }
+    }
+  } catch {
+    return {
+      success: false,
+      message:
+        "Oops! We couldn’t add your like to this article. Please try again later!",
+    };
+  }
+}
+
+export async function dislikeArticle(
+  dispatch: (action: ArticleAction | ArticleErr) => void,
+  slug?: string,
+  currentPage?: number,
+) {
+  const token: string | null = localStorage.getItem("token");
+  try {
+    if (token) {
+      const res: Response = await fetch(`${BASE}/articles/${slug}/favorite`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        fetchArticles(dispatch, currentPage);
+        return { success: true, message: "" };
+      } else {
+        const data = await res.json();
+        return {
+          success: false,
+          message: `Failed to remove the like from the article. ${data[0]}`,
+        };
+      }
+    }
+  } catch {
+    return {
+      success: false,
+      message:
+        "Oops! We couldn’t remove your like from this article. Please try again later!",
     };
   }
 }

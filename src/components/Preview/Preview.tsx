@@ -1,28 +1,82 @@
-import classes from "./Preview.module.scss";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+
 import Grid from "@mui/material/Grid2";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-
-import Markdown from "../Markdown";
-
+import Button from "@mui/material/Button";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import ErrorIcon from "@mui/icons-material/Error";
+
+import classes from "./Preview.module.scss";
+import Markdown from "../Markdown";
+import Tags from "../Tags";
+
 import { IArticleProps, RootState } from "../../types/interfaces";
 import convertDate from "../../utils/convertDate";
 import truncateStr from "../../utils/truncateStr";
-
-import { useState } from "react";
 import stringAvatar from "../../utils/stringAvatar";
-import { Link } from "react-router";
-import Tags from "../Tags";
-import { useSelector } from "react-redux";
-import { Button } from "@mui/material";
+import { deleteArticle } from "../../utils/fetchAPI";
+import { Alert } from "@mui/material";
 
 const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [imgState, setImgState] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
   const user = useSelector((store: RootState) => store.user);
   const isAuthor: boolean = user.uname === info.author.username;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { slug } = useParams();
+  const page = useSelector((state: RootState) => state.articles.currentPage);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDelete = async () => {
+    setOpen(false);
+    const result: { success: boolean; message: string } | undefined =
+      await deleteArticle(dispatch, slug, page);
+    if (result && result.success) {
+      navigate("/");
+    } else if (result && !result.success) {
+      setErrorMessage(result.message);
+    }
+  };
+
   return (
     <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText
+            className={classes.dialogText}
+            id="alert-dialog-description"
+          >
+            <ErrorIcon />
+            Are you sure that you want to delete this article?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>No</Button>
+          <Button onClick={handleDelete} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Grid component="div" size={9.6} style={{ height: "50%" }}>
         <Typography
           variant="h6"
@@ -75,7 +129,7 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
             size="small"
             color="error"
             variant="outlined"
-            onClick={() => confirm("sure?")}
+            onClick={handleClickOpen}
             className={classes.deleteBtn}
           >
             <span>Delete</span>
@@ -92,6 +146,11 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
             </Link>
           </Button>
         </Grid>
+      )}
+      {errorMessage && (
+        <Alert severity="error" onClose={() => setErrorMessage(null)}>
+          {errorMessage}
+        </Alert>
       )}
     </>
   );

@@ -60,15 +60,18 @@ const Article: React.FC<{ editMode?: boolean }> = ({ editMode = false }) => {
       setValue("title", info?.title);
       setValue("description", info?.description);
       setValue("body", info?.body);
+    } else {
+      setValue("title", "");
+      setValue("description", "");
+      setValue("body", "");
     }
     const tags = info?.tagList.map((x) => ({ tag: x }));
     console.log(tags);
     if (tags && tags?.length > 0) {
       setValue("tagList", tags);
     } else setValue("tagList", [{ tag: "" }]);
-  }, [info, setValue]);
+  }, [info, setValue, editMode]);
 
-  console.log(info?.tagList);
   const submitForm = async (data: FieldValues) => {
     let result: { success: boolean; message: string } | undefined;
     if (editMode) {
@@ -168,11 +171,7 @@ const Article: React.FC<{ editMode?: boolean }> = ({ editMode = false }) => {
           hasDefaultTags={Array.isArray(info?.tagList)}
         />
         {errorMessage && (
-          <Alert
-            severity="error"
-            className={classes.alert}
-            onClose={() => setErrorMessage(null)}
-          >
+          <Alert severity="error" onClose={() => setErrorMessage(null)}>
             {errorMessage}
           </Alert>
         )}

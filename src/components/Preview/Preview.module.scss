@@ -86,12 +86,18 @@ button.deleteBtn {
   border-color: #f5222d;
 }
 
-// for testing
 .articleBtns {
-  outline: 2px dashed palevioletred;
-  background-color: rgba(216, 112, 147, 0.1);
   display: flex;
   justify-content: right;
   align-items: center;
   height: 56px;
+}
+
+.dialogText {
+  display: flex;
+  align-items: center;
+  svg {
+    margin-right: 4px;
+    color: #faad14;
+  }
 }

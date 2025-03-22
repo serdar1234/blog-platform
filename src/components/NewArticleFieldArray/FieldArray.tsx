@@ -30,7 +30,6 @@ const FieldArray: React.FC<{
   useEffect(() => {
     if (hasDefaultTags) setIsEmptyTag(false);
   }, [hasDefaultTags]);
-  console.log("def tags are", hasDefaultTags);
   return (
     <>
       <label>Tags</label>

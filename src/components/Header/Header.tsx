@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 import classes from "./Header.module.scss";
-import { useState } from "react";
+import { useState, JSX } from "react";
 import { Link, NavLink } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { articleActions } from "../../store/articles";
@@ -15,7 +15,7 @@ import { fetchArticles } from "../../utils/fetchAPI";
 import stringAvatar from "../../utils/stringAvatar";
 import { RootState } from "../../types/interfaces";
 
-export default function Header() {
+export default function Header(): JSX.Element {
   const [imgState, setImgState] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { turnPage } = articleActions;

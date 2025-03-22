@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import Grid from "@mui/material/Grid2";
@@ -11,7 +12,7 @@ import { fetchArticles } from "../../utils/fetchAPI";
 import { articleActions } from "../../store/articles";
 import Error from "../Error";
 
-export default function CardList() {
+export default function CardList(): JSX.Element {
   const { articles }: { articles: IArticle[] } = useSelector(
     (store: RootState) => store.articles,
   );

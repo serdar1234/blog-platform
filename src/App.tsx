@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, JSX } from "react";
 import { useDispatch } from "react-redux";
 import { fetchArticles } from "./utils/fetchAPI";
 import RootLayout from "./pages/RootPage";
 import { startUp } from "./utils/fetchAPI";
 
-function App() {
+function App(): JSX.Element {
   const dispatch = useDispatch();
 
   useEffect(() => {

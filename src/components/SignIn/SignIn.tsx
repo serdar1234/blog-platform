@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { useState } from "react";
+import { JSX, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
 import Paper from "@mui/material/Paper";
@@ -14,7 +14,7 @@ import { RootState } from "../../types/interfaces";
 import { Alert } from "@mui/material";
 import FormTitle from "../FormTitle";
 
-export default function SignIn() {
+export default function SignIn(): JSX.Element {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { useForm, FieldValues } from "react-hook-form";
-import { useState } from "react";
+import { useState, JSX } from "react";
 
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router";
 import { Alert } from "@mui/material";
 import FormTitle from "../FormTitle";
 
-export default function Profile() {
+export default function Profile(): JSX.Element {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();

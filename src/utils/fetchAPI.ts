@@ -120,7 +120,7 @@ export async function newUserSignUp(
       return { success: false, message };
     }
   } catch {
-    return { success: false, message: "Sign in failed" };
+    return { success: false, message: "Sign up failed" };
   }
 }
 

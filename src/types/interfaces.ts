@@ -44,6 +44,7 @@ export interface IArticlesObject {
   articlesCount: number;
   currentPage?: number;
   loadingError?: null | string;
+  isLoading: boolean;
 }
 
 export interface PayloadAction {

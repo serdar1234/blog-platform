@@ -1,31 +1,18 @@
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import Button from "@mui/material/Button";
-import classes from "./Error.module.scss";
-import HomeIcon from "@mui/icons-material/Home";
 
-import { useNavigate } from "react-router";
-
-const Error: React.FC<{ errorMessage: string }> = ({ errorMessage }) => {
-  const navigate = useNavigate();
-
+const Error: React.FC<{ errorMessage: string; statusCode?: number }> = ({
+  errorMessage,
+  statusCode,
+}) => {
   return (
-    <>
-      <Alert severity="error">
-        <AlertTitle>Error</AlertTitle>
-        Something went wrong. {errorMessage}
-      </Alert>
-      <Button
-        className={classes.homeBtn}
-        type="button"
-        variant="contained"
-        color="error"
-        endIcon={<HomeIcon />}
-        onClick={() => navigate("/")}
-      >
-        Home
-      </Button>
-    </>
+    <Alert
+      severity="error"
+      style={{ marginTop: 16, boxShadow: "5px 5px 5px #ddd" }}
+    >
+      <AlertTitle>Error {statusCode}</AlertTitle>
+      {errorMessage}
+    </Alert>
   );
 };
 

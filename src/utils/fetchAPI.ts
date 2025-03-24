@@ -10,15 +10,16 @@ const BASE: string = "https://blog-platform.kata.academy/api";
 
 type ArticleAction = ReturnType<typeof articleActions.addArticles>;
 type ArticleErr = ReturnType<typeof articleActions.setError>;
+type ArticleLoading = ReturnType<typeof articleActions.setIsLoading>;
 type UAction = ReturnType<typeof userActions.addUser>;
 
 export async function fetchArticles(
-  dispatch: (action: ArticleAction | ArticleErr) => void,
+  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
   page: number | null = null,
 ) {
   try {
     let res: Response;
-
+    dispatch(articleActions.setIsLoading());
     if (page) {
       res = await fetch(
         `${BASE}/articles?limit=5&offset=${(page - 1) * 5}`,
@@ -32,12 +33,14 @@ export async function fetchArticles(
       dispatch(articleActions.addArticles(article));
       dispatch(articleActions.setError(null));
       if (article.articlesCount === 0) {
-        return;
+        throw new Error("No articles are found");
       }
+    } else {
+      throw new Error("Network error");
     }
   } catch (error) {
     if (error instanceof Error) {
-      dispatch(articleActions.setError(error.message));
+      dispatch(articleActions.setError(`${error.name}. ${error.message}`));
     } else {
       dispatch(
         articleActions.setError("Network error. Please try again later"),
@@ -48,10 +51,11 @@ export async function fetchArticles(
 
 export async function fetchThisArticle(
   slug: string | null = null,
-  dispatch: (action: ArticleErr) => void,
+  dispatch: (action: ArticleErr | ArticleLoading) => void,
 ) {
   try {
     let res = null;
+    dispatch(articleActions.setIsLoading());
     if (slug) {
       res = await axios.get(`${BASE}/articles/${slug}`, getToken());
     }
@@ -69,9 +73,7 @@ export async function fetchThisArticle(
     }
   } catch (error) {
     if (error instanceof Error) {
-      dispatch(
-        articleActions.setError("Error fetching article: " + error.message),
-      );
+      dispatch(articleActions.setError(`${error.name}. ${error.message}`));
     } else {
       dispatch(articleActions.setError("Could not find this article"));
     }
@@ -267,7 +269,7 @@ export async function logOut(dispatch: (action: UAction) => void) {
 }
 
 export async function createArticle(
-  dispatch: (action: ArticleAction | ArticleErr) => void,
+  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
   info: FieldValues,
 ) {
   const { title, description, body, tagList } = info;
@@ -313,7 +315,7 @@ export async function createArticle(
 }
 
 export async function updateArticle(
-  dispatch: (action: ArticleAction | ArticleErr) => void,
+  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
   info: FieldValues,
   slug?: string,
   currentPage?: number,
@@ -361,7 +363,7 @@ export async function updateArticle(
 }
 
 export async function deleteArticle(
-  dispatch: (action: ArticleAction | ArticleErr) => void,
+  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
   slug?: string,
   currentPage?: number,
 ) {
@@ -396,7 +398,7 @@ export async function deleteArticle(
 }
 
 export async function favorArticle(
-  dispatch: (action: ArticleAction | ArticleErr) => void,
+  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
   slug?: string,
   currentPage?: number,
 ) {
@@ -431,7 +433,7 @@ export async function favorArticle(
 }
 
 export async function dislikeArticle(
-  dispatch: (action: ArticleAction | ArticleErr) => void,
+  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
   slug?: string,
   currentPage?: number,
 ) {

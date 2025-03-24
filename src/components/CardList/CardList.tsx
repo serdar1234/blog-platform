@@ -11,17 +11,26 @@ import PreviewCard from "../PreviewCard/PreviewCard";
 import { fetchArticles } from "../../utils/fetchAPI";
 import { articleActions } from "../../store/articles";
 import Error from "../Error";
+import Spinner from "../Spinner";
 
 export default function CardList(): JSX.Element {
-  const { articles }: { articles: IArticle[] } = useSelector(
-    (store: RootState) => store.articles,
-  );
-  const currentPage: number | undefined = useSelector(
-    (store: RootState) => store.articles.currentPage,
-  );
-  const loadingError: null | string | undefined = useSelector(
-    (store: RootState) => store.articles.loadingError,
-  );
+  const {
+    articles,
+    currentPage,
+    loadingError,
+    isLoading,
+  }: {
+    articles: IArticle[];
+    currentPage?: number;
+    loadingError?: string | null;
+    isLoading: boolean;
+  } = useSelector((store: RootState) => ({
+    articles: store.articles.articles,
+    currentPage: store.articles.currentPage,
+    loadingError: store.articles.loadingError,
+    isLoading: store.articles.isLoading,
+  }));
+
   const { turnPage } = articleActions;
   const pageCount: number = Math.ceil(
     useSelector((store: RootState) => store.articles.articlesCount) / 5,
@@ -35,7 +44,8 @@ export default function CardList(): JSX.Element {
     dispatch(turnPage(page));
     fetchArticles(dispatch, page);
   };
-  if (loadingError) return <Error errorMessage={loadingError} />;
+  if (isLoading) return <Spinner />;
+  else if (loadingError) return <Error errorMessage={loadingError} />;
   else {
     return (
       <>

@@ -70,3 +70,10 @@ export interface InputFieldProps {
   rules?: RegisterOptions<FieldValues>;
   [key: string]: unknown;
 }
+
+export interface IResult {
+  success: boolean;
+  message: string;
+  favorited?: boolean;
+  favoritesCount?: number;
+}

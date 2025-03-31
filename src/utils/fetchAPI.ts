@@ -397,11 +397,7 @@ export async function deleteArticle(
   }
 }
 
-export async function favorArticle(
-  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
-  slug?: string,
-  currentPage?: number,
-) {
+export async function favorArticle(slug?: string) {
   const token: string | null = localStorage.getItem("token");
   try {
     if (token) {
@@ -413,8 +409,13 @@ export async function favorArticle(
       });
 
       if (res.ok) {
-        fetchArticles(dispatch, currentPage);
-        return { success: true, message: "" };
+        const data = await res.json();
+        return {
+          success: true,
+          message: "",
+          favorited: data.article.favorited,
+          favoritesCount: data.article.favoritesCount,
+        };
       } else {
         const data = await res.json();
         return {
@@ -431,11 +432,7 @@ export async function favorArticle(
   }
 }
 
-export async function dislikeArticle(
-  dispatch: (action: ArticleAction | ArticleErr | ArticleLoading) => void,
-  slug?: string,
-  currentPage?: number,
-) {
+export async function dislikeArticle(slug?: string) {
   const token: string | null = localStorage.getItem("token");
   try {
     if (token) {
@@ -447,8 +444,13 @@ export async function dislikeArticle(
       });
 
       if (res.ok) {
-        fetchArticles(dispatch, currentPage);
-        return { success: true, message: "" };
+        const data = await res.json();
+        return {
+          success: true,
+          message: "",
+          favorited: data.article.favorited,
+          favoritesCount: data.article.favoritesCount,
+        };
       } else {
         const data = await res.json();
         return {

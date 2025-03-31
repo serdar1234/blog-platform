@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
@@ -8,32 +7,38 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 
 import classes from "./LikeComponent.module.scss";
 
-import { IArticleProps, RootState } from "../../types/interfaces";
+import { IArticleProps, IResult } from "../../types/interfaces";
 
 import { dislikeArticle, favorArticle } from "../../utils/fetchAPI";
 import { Alert } from "@mui/material";
 
 const LikeComponent: React.FC<IArticleProps> = ({ info, type = null }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  const [result, setResult] = useState<IResult | undefined>(undefined);
+  const [isLiked, setIsLiked] = useState<boolean>(info.favorited);
   const { slug } = useParams();
-  const page = useSelector((state: RootState) => state.articles.currentPage);
-  const IconComponent = info.favorited
-    ? FavoriteOutlinedIcon
-    : FavoriteBorderOutlinedIcon;
 
   const handleLikeClick = async () => {
     if (type) {
-      const result: { success: boolean; message: string } | undefined =
-        info.favorited
-          ? await dislikeArticle(dispatch, slug, page)
-          : await favorArticle(dispatch, slug, page);
+      if (isLiked) {
+        const res = await dislikeArticle(slug);
+        setIsLiked(false);
+        setResult(res);
+      } else {
+        const res = await favorArticle(slug);
+        setIsLiked(true);
+        setResult(res);
+      }
       if (result && !result.success) {
         setErrorMessage(result.message);
       }
     }
   };
-  console.log("like component rerender");
+
+  const IconComponent = isLiked
+    ? FavoriteOutlinedIcon
+    : FavoriteBorderOutlinedIcon;
+
   if (errorMessage) {
     return (
       <Alert severity="error" onClose={() => setErrorMessage(null)}>
@@ -46,11 +51,12 @@ const LikeComponent: React.FC<IArticleProps> = ({ info, type = null }) => {
         <IconComponent
           fontSize="small"
           className={classNames(classes.heart, {
-            [classes.favored]: info.favorited,
+            [classes.favored]:
+              result && result.success ? result.favorited : info.favorited,
           })}
           onClick={handleLikeClick}
         />
-        {info.favoritesCount}
+        {result && result.success ? result.favoritesCount : info.favoritesCount}
       </span>
     );
 };

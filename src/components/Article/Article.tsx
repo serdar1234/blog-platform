@@ -54,7 +54,6 @@ const Article: React.FC = () => {
     }
   }, [slug, articles, dispatch]);
 
-  console.log("article rerender");
   if (isLoading) return <Spinner />;
   else if (loadingError) return <Error errorMessage={loadingError} />;
   else {

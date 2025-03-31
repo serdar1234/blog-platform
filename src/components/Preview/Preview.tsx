@@ -54,7 +54,6 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
     }
   };
 
-  console.log("preview rerender");
   return (
     <>
       <Dialog

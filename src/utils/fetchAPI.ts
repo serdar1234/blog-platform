@@ -426,8 +426,7 @@ export async function favorArticle(
   } catch {
     return {
       success: false,
-      message:
-        "Oops! We couldn’t add your like to this article. Please try again later!",
+      message: "Oops! We couldn’t add your like to this article.",
     };
   }
 }
@@ -461,8 +460,7 @@ export async function dislikeArticle(
   } catch {
     return {
       success: false,
-      message:
-        "Oops! We couldn’t remove your like from this article. Please try again later!",
+      message: "Oops! We couldn’t remove your like from this article.",
     };
   }
 }

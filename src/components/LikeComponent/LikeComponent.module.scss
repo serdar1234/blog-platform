@@ -1,0 +1,18 @@
+$semiBlack: #000000bf;
+
+.likeSpan {
+  color: $semiBlack;
+  display: inline-block;
+}
+
+.heart {
+  margin-left: 12px;
+  margin-right: 3px;
+  position: relative;
+  top: 3px;
+  color: $semiBlack;
+}
+
+.heart.favored {
+  color: #e91e63; // pink heart
+}

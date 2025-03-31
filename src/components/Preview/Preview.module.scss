@@ -15,23 +15,6 @@ $green: #52c41a;
   }
 }
 
-.likeSpan {
-  color: $semiBlack;
-  display: inline-block;
-}
-
-.heart {
-  margin-left: 12px;
-  margin-right: 3px;
-  position: relative;
-  top: 3px;
-  color: $semiBlack;
-}
-
-.heart.favored {
-  color: #e91e63; // pink heart
-}
-
 span.text {
   font-family: Inter;
   font-weight: 400;

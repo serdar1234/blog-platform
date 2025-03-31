@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import classNames from "classnames";
 
 import Grid from "@mui/material/Grid2";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -25,12 +21,9 @@ import { IArticleProps, RootState } from "../../types/interfaces";
 import convertDate from "../../utils/convertDate";
 import truncateStr from "../../utils/truncateStr";
 import stringAvatar from "../../utils/stringAvatar";
-import {
-  deleteArticle,
-  dislikeArticle,
-  favorArticle,
-} from "../../utils/fetchAPI";
+import { deleteArticle } from "../../utils/fetchAPI";
 import { Alert } from "@mui/material";
+import LikeComponent from "../LikeComponent";
 
 const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -42,9 +35,6 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const page = useSelector((state: RootState) => state.articles.currentPage);
-  const IconComponent = info.favorited
-    ? FavoriteOutlinedIcon
-    : FavoriteBorderOutlinedIcon;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,17 +54,7 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
     }
   };
 
-  const handleLikeClick = async () => {
-    if (type) {
-      const result: { success: boolean; message: string } | undefined =
-        info.favorited
-          ? await dislikeArticle(dispatch, slug, page)
-          : await favorArticle(dispatch, slug, page);
-      if (result && !result.success) {
-        setErrorMessage(result.message);
-      }
-    }
-  };
+  console.log("preview rerender");
   return (
     <>
       <Dialog
@@ -112,16 +92,7 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
             <Link to={`/articles/${info.slug}`}>{truncateStr(info.title)}</Link>
           )}
         </Typography>
-        <span className={classes.likeSpan}>
-          <IconComponent
-            fontSize="small"
-            className={classNames(classes.heart, {
-              [classes.favored]: info.favorited,
-            })}
-            onClick={handleLikeClick}
-          />
-          {info.favoritesCount}
-        </span>
+        <LikeComponent info={info} type={type} />
         <Tags tags={type ? info.tagList : info.tagList.slice(0, 7)} />
       </Grid>
       <Grid className={classes.avatar} size={2.4}>

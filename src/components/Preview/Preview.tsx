@@ -102,14 +102,14 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
         {!imgState && (
           <Avatar
             {...stringAvatar(info.author.username)}
-            alt={info.author.bio}
+            alt={`${info.author.username}'s avatar`}
           />
         )}
         <Avatar
           src={info.author.image}
           onLoad={() => setImgState(true)}
           onError={() => setImgState(false)}
-          alt={info.author.bio}
+          alt={`${info.author.username}'s avatar`}
           style={{ display: imgState ? "block" : "none" }}
         />
       </Grid>

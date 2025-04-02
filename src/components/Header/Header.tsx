@@ -38,7 +38,12 @@ export default function Header(): JSX.Element {
       >
         <Toolbar>
           <Typography variant="h6" component="h6" sx={{ flexGrow: 1 }}>
-            <Link to="/" className={classes.blogLogo} onClick={turnPageOne}>
+            <Link
+              to="/"
+              className={classes.blogLogo}
+              onClick={turnPageOne}
+              aria-label="go to the main page"
+            >
               Realworld Blog
             </Link>
           </Typography>
@@ -50,11 +55,19 @@ export default function Header(): JSX.Element {
                 variant="outlined"
                 className={classes.signUpBtn}
               >
-                <Link to={"/new-article"} onClick={() => {}}>
+                <Link
+                  to={"/new-article"}
+                  onClick={() => {}}
+                  aria-label="create a new article"
+                >
                   Create article
                 </Link>
               </Button>
-              <NavLink to="/profile" className={classes.profileLogo}>
+              <NavLink
+                to="/profile"
+                className={classes.profileLogo}
+                aria-label="modify your profile"
+              >
                 <Typography
                   variant="h6"
                   component="h6"
@@ -89,6 +102,7 @@ export default function Header(): JSX.Element {
               <Button type="button" size="large">
                 <NavLink
                   to={"/sign-in"}
+                  aria-label="sign in to your account"
                   style={({ isActive }) => ({
                     color: isActive ? "#f5222d" : "#000",
                   })}
@@ -102,7 +116,9 @@ export default function Header(): JSX.Element {
                 size="large"
                 className={classes.signUpBtn}
               >
-                <Link to={"/sign-up"}>Sign Up</Link>
+                <Link to={"/sign-up"} aria-label="register a new account">
+                  Sign Up
+                </Link>
               </Button>
             </>
           )}

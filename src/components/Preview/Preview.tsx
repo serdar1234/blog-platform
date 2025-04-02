@@ -88,7 +88,9 @@ const Preview: React.FC<IArticleProps> = ({ info, type = null }) => {
           {type ? (
             info.title
           ) : (
-            <Link to={`/articles/${info.slug}`}>{truncateStr(info.title)}</Link>
+            <Link to={`/articles/${info.slug}`} aria-label={info.title}>
+              {truncateStr(info.title)}
+            </Link>
           )}
         </Typography>
         <LikeComponent info={info} type={type} />

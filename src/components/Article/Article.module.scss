@@ -1,3 +1,10 @@
+article > p {
+  overflow-wrap: break-word;
+  @supports (word-wrap: break-word) {
+    word-wrap: break-word;
+  }
+}
+
 .card {
   max-width: 938px;
   padding: 16px;
